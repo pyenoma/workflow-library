@@ -2,8 +2,10 @@ package workflow.dummies;
 
 import workflow.IWorkflowTask;
 import workflow.WorkflowNodeResult;
+import workflow.annotations.WorkflowTaskBean;
 import workflow.context.IWorkflowContext;
 
+@WorkflowTaskBean
 public class DummyWorkflowTask3 implements IWorkflowTask {
 
     @Override
