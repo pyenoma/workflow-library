@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DuplicateWorkflowIdValidatorTest {
@@ -24,8 +25,9 @@ class DuplicateWorkflowIdValidatorTest {
         workflowIds.add("WorkflowId");
 
         IWorkflowDefinitionValidator duplicateWorkflowIdValidator = new DuplicateWorkflowIdValidator(workflowIds);
-        assertThrows(DuplicateWorkflowIdException.class, () -> {
+        DuplicateWorkflowIdException exception = assertThrows(DuplicateWorkflowIdException.class, () -> {
             duplicateWorkflowIdValidator.validate("WorkflowId", DummyWorkflowDefinitionBeanWithNoId.class);
         });
+        assertEquals("Duplicate workflow ID: WorkflowId", exception.getMessage());
     }
 }
