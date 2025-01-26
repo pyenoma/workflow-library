@@ -2,9 +2,7 @@ package workflow.context;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
+import workflow.annotations.WorkflowContextBean;
 import workflow.exceptions.WorkflowException;
 
 import java.util.Collections;
@@ -13,10 +11,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Component
-@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter
 @ToString
+@WorkflowContextBean
 public class DefaultWorkflowContext implements IWorkflowContext{
     private final Map<String, Object> data = new ConcurrentHashMap<>();
     private final List<WorkflowException> exceptions = new CopyOnWriteArrayList<>();
@@ -28,12 +25,7 @@ public class DefaultWorkflowContext implements IWorkflowContext{
 
     @Override
     public <T> T get(String key, Class<T> type) {
-        Object value = data.get(key);
-        if (value != null) {
-            return type.cast(value);
-        } else {
-            return null;
-        }
+        return type.cast(data.get(key));
     }
 
     @Override
