@@ -12,4 +12,5 @@ public interface IWorkflowErrorHandler {
      * @param context the workflow context
      */
     void handle(WorkflowException e, IWorkflowContext context);
+
 }
