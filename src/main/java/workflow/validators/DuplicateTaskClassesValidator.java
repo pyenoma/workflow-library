@@ -16,7 +16,7 @@ public class DuplicateTaskClassesValidator implements IWorkflowDefinitionValidat
         WorkflowTask[] tasks = workflowDefinitionType.getAnnotation(WorkflowDefinition.class).tasks();
         for (WorkflowTask task : tasks) {
             if (!seenClasses.add(task.taskClass())) {
-                throw new DuplicateTaskClassFoundException(task.taskClass(), workflowDefinitionType);
+                throw new DuplicateTaskClassFoundException(workflowDefinitionType, task.taskClass());
             }
         }
     }
