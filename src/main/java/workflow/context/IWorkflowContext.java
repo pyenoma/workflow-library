@@ -1,11 +1,20 @@
 package workflow.context;
 
+import workflow.IWorkflowTask;
+import workflow.WorkflowNodeResult;
 import workflow.exceptions.WorkflowException;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IWorkflowContext {
+    /**
+     * Retrieves the ID of the workflow.
+     *
+     * @return the workflow ID
+     */
+    String getWorkflowId();
+
     /**
      * Stores a value in the context.
      *
@@ -44,4 +53,18 @@ public interface IWorkflowContext {
      * @return a list of exceptions, or an empty list if none are stored
      */
     List<WorkflowException> getExceptions();
+
+    /**
+     * Retrieves the execution order of the workflow.
+     *
+     * @return the execution order
+     */
+    Map<Class<? extends IWorkflowTask>, WorkflowNodeResult> getExecutionOrder();
+
+    /**
+     * Adds a task to the execution order.
+     *
+     * @param task the task to add
+     */
+    void addExecution(Class<? extends IWorkflowTask> task, WorkflowNodeResult result);
 }

@@ -7,10 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DefaultWorkflowContextTest {
+    private static final String WORKFLOW_ID = "WorkflowId";
 
     @Test
     void testGetPutAndGetAll() {
-        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext();
+        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
         String key = "key";
         String value = "value";
         defaultWorkflowContext.put(key, value);
@@ -20,7 +21,7 @@ class DefaultWorkflowContextTest {
 
     @Test
     void testAddGetException() {
-        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext();
+        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
         WorkflowException testWorkflowException = new WorkflowException("Test Workflow Exception");
         defaultWorkflowContext.addException(testWorkflowException);
         assertEquals(1, defaultWorkflowContext.getExceptions().size());

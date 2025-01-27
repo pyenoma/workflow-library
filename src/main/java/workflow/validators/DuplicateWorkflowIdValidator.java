@@ -12,7 +12,7 @@ public class DuplicateWorkflowIdValidator implements IWorkflowDefinitionValidato
     private final Set<String> seenWorkflowIds;
 
     @Override
-    public void validate(String workflowId, Class<?> workflowDefinition) {
+    public void validate(String workflowId, Class<?> workflowDefinition) throws DuplicateWorkflowIdException {
         if (!seenWorkflowIds.add(workflowId)) {
             throw new DuplicateWorkflowIdException(workflowId);
         }

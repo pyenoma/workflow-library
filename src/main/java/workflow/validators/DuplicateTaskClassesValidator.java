@@ -11,7 +11,7 @@ import java.util.Set;
 @Component
 public class DuplicateTaskClassesValidator implements IWorkflowDefinitionValidator {
     @Override
-    public void validate(String workflowId, Class<?> workflowDefinitionType) {
+    public void validate(String workflowId, Class<?> workflowDefinitionType) throws DuplicateTaskClassFoundException {
         Set<Class<?>> seenClasses = new HashSet<>();
         WorkflowTask[] tasks = workflowDefinitionType.getAnnotation(WorkflowDefinition.class).tasks();
         for (WorkflowTask task : tasks) {
