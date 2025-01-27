@@ -5,10 +5,6 @@ public class WorkflowException extends RuntimeException {
         super(message);
     }
 
-    public WorkflowException(Exception e) {
-        super(e);
-    }
-
     public WorkflowException(String message, Exception e) {
         super(message, e);
     }
