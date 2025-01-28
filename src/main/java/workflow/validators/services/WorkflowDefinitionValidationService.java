@@ -2,7 +2,7 @@ package workflow.validators.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import workflow.validators.IWorkflowDefinitionValidator;
+import workflow.validators.workflowdefinitionvalidators.IWorkflowDefinitionValidator;
 
 import java.util.List;
 

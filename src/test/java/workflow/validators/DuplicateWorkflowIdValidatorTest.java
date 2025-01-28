@@ -3,6 +3,8 @@ package workflow.validators;
 import org.junit.jupiter.api.Test;
 import workflow.dummies.DummyWorkflowDefinitionBeanWithNoId;
 import workflow.exceptions.DuplicateWorkflowIdException;
+import workflow.validators.workflowdefinitionvalidators.DuplicateWorkflowIdValidator;
+import workflow.validators.workflowdefinitionvalidators.IWorkflowDefinitionValidator;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -6,6 +6,7 @@ import workflow.dummies.DummyWorkflowDefinitionBeanWithNoId;
 import workflow.dummies.DummyWorkflowDefinitionWithDuplicateTasks;
 import workflow.dummies.DummyWorkflowTask;
 import workflow.exceptions.DuplicateTaskClassFoundException;
+import workflow.validators.workflowdefinitionvalidators.DuplicateTaskClassesValidator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

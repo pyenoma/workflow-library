@@ -1,4 +1,4 @@
-package workflow.validators;
+package workflow.validators.workflowdefinitionvalidators;
 
 import workflow.exceptions.WorkflowException;
 

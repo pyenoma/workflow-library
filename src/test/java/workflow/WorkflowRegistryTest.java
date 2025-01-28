@@ -8,12 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WorkflowRegistryTest {
 
+    private static final String WORKFLOW_ID = "WorkflowId";
+
     @Test
     void testRegisterAndGetWorkflow() {
         WorkflowRegistry registry = new WorkflowRegistry();
-        Workflow workflow = new Workflow(new HashMap<>());
-        registry.register("WorkflowId", workflow);
-        assertEquals(workflow, registry.getWorkflow("WorkflowId"));
+        Workflow workflow = new Workflow(WORKFLOW_ID, new HashMap<>());
+        registry.register(WORKFLOW_ID, workflow);
+        assertEquals(workflow, registry.getWorkflow(WORKFLOW_ID));
     }
 
 }

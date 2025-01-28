@@ -58,7 +58,7 @@ class WorkflowExecutorTest {
         Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyWorkflowTask2.class, Set.of(DummyWorkflowTask3.class));
-        Workflow workflow = new Workflow(adjacency);
+        Workflow workflow = new Workflow(WORKFLOW_ID, adjacency);
         when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenReturn(workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         when(workflowContextFactory.createContext(DefaultWorkflowContext.class, WORKFLOW_ID)).thenReturn(context);
@@ -86,7 +86,7 @@ class WorkflowExecutorTest {
         Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyFailingWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
-        Workflow workflow = new Workflow(adjacency);
+        Workflow workflow = new Workflow(WORKFLOW_ID, adjacency);
         when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenReturn(workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         when(workflowContextFactory.createContext(DefaultWorkflowContext.class, WORKFLOW_ID)).thenReturn(context);
@@ -117,7 +117,7 @@ class WorkflowExecutorTest {
         Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyWorkflowTaskThatThrowsException.class, Set.of(DummyWorkflowTask3.class));
-        Workflow workflow = new Workflow(adjacency);
+        Workflow workflow = new Workflow(WORKFLOW_ID, adjacency);
         when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenReturn(workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         when(workflowContextFactory.createContext(DefaultWorkflowContext.class, WORKFLOW_ID)).thenReturn(context);
