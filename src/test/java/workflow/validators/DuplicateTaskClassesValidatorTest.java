@@ -1,12 +1,12 @@
 package workflow.validators;
 
 import org.junit.jupiter.api.Test;
-import workflow.annotations.WorkflowDefinition;
+import org.pyenoma.workflow.annotations.WorkflowDefinition;
+import org.pyenoma.workflow.exceptions.DuplicateTaskClassFoundException;
+import org.pyenoma.workflow.validators.workflowdefinitionvalidators.DuplicateTaskClassesValidator;
 import workflow.dummies.DummyWorkflowDefinitionBeanWithNoId;
 import workflow.dummies.DummyWorkflowDefinitionWithDuplicateTasks;
 import workflow.dummies.DummyWorkflowTask;
-import workflow.exceptions.DuplicateTaskClassFoundException;
-import workflow.validators.workflowdefinitionvalidators.DuplicateTaskClassesValidator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;

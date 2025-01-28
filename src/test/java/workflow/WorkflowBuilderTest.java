@@ -7,15 +7,20 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.pyenoma.workflow.IWorkflowTask;
+import org.pyenoma.workflow.Workflow;
+import org.pyenoma.workflow.WorkflowBuilder;
+import org.pyenoma.workflow.WorkflowRegistry;
+import org.pyenoma.workflow.annotations.WorkflowDefinition;
+import org.pyenoma.workflow.exceptions.WorkflowException;
+import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
+import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
-import workflow.annotations.WorkflowDefinition;
 import workflow.dummies.DummyWorkflowDefinitionBeanWithId;
 import workflow.dummies.DummyWorkflowDefinitionBeanWithNoId;
 import workflow.dummies.DummyWorkflowTask;
 import workflow.dummies.DummyWorkflowTask2;
 import workflow.dummies.DummyWorkflowTask3;
-import workflow.exceptions.WorkflowException;
-import workflow.validators.services.WorkflowDefinitionValidationService;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +41,9 @@ class WorkflowBuilderTest {
 
     @Mock private ApplicationContext applicationContext;
 
-    @Mock private WorkflowDefinitionValidationService validationService;
+    @Mock private WorkflowDefinitionValidationService workflowDefinitionValidationService;
+
+    @Mock private WorkflowValidationService workflowValidationService;
 
     @Mock private WorkflowRegistry workflowRegistry;
 
@@ -56,7 +63,8 @@ class WorkflowBuilderTest {
                 new String[] {DummyWorkflowDefinitionBeanWithNoId.class.getName()});
         when(applicationContext.getType(DummyWorkflowDefinitionBeanWithNoId.class.getName())).thenAnswer(
                 _ -> DummyWorkflowDefinitionBeanWithNoId.class);
-        doNothing().when(validationService).validate(anyString(), any());
+        doNothing().when(workflowDefinitionValidationService).validate(anyString(), any());
+        doNothing().when(workflowValidationService).validate(any());
 
         // Act
         workflowBuilder.build();
@@ -82,7 +90,8 @@ class WorkflowBuilderTest {
                 new String[] {DummyWorkflowDefinitionBeanWithId.class.getName()});
         when(applicationContext.getType(DummyWorkflowDefinitionBeanWithId.class.getName())).thenAnswer(
                 _ -> DummyWorkflowDefinitionBeanWithId.class);
-        doNothing().when(validationService).validate(anyString(), any());
+        doNothing().when(workflowDefinitionValidationService).validate(anyString(), any());
+        doNothing().when(workflowValidationService).validate(any());
 
         // Act
         workflowBuilder.build();
@@ -109,8 +118,9 @@ class WorkflowBuilderTest {
                 new String[] {DummyWorkflowDefinitionBeanWithNoId.class.getName()});
         when(applicationContext.getType(DummyWorkflowDefinitionBeanWithNoId.class.getName())).thenAnswer(
                 _ -> DummyWorkflowDefinitionBeanWithNoId.class);
-        doThrow(new WorkflowException("Invalid task class definition found")).when(validationService)
+        doThrow(new WorkflowException("Invalid task class definition found")).when(workflowDefinitionValidationService)
                 .validate(anyString(), any());
+        doNothing().when(workflowValidationService).validate(any());
 
         // Act and assert
         assertThrows(WorkflowException.class, () -> workflowBuilder.build());

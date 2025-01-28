@@ -2,11 +2,12 @@ package workflow.validators.workflowvalidators;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import workflow.Workflow;
+import org.pyenoma.workflow.Workflow;
+import org.pyenoma.workflow.exceptions.CyclicWorkflowDefinedException;
+import org.pyenoma.workflow.validators.workflowvalidators.CycleValidator;
 import workflow.dummies.DummyWorkflowTask;
 import workflow.dummies.DummyWorkflowTask2;
 import workflow.dummies.DummyWorkflowTask3;
-import workflow.exceptions.CyclicWorkflowDefinedException;
 
 import java.util.Map;
 import java.util.Set;

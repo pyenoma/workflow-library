@@ -1,6 +1,8 @@
 package workflow;
 
 import org.junit.jupiter.api.Test;
+import org.pyenoma.workflow.Workflow;
+import org.pyenoma.workflow.WorkflowRegistry;
 
 import java.util.HashMap;
 

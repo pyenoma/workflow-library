@@ -1,7 +1,9 @@
 package workflow.context;
 
 import org.junit.jupiter.api.Test;
-import workflow.exceptions.WorkflowException;
+import org.pyenoma.workflow.context.DefaultWorkflowContext;
+import org.pyenoma.workflow.context.IWorkflowContext;
+import org.pyenoma.workflow.exceptions.WorkflowException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

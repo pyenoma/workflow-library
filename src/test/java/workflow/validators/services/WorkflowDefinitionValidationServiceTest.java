@@ -1,6 +1,7 @@
 package workflow.validators.services;
 
 import org.junit.jupiter.api.Test;
+import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 
 import java.util.Collections;
 
