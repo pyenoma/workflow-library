@@ -27,9 +27,8 @@ class DuplicateWorkflowIdValidatorTest {
         workflowIds.add("WorkflowId");
 
         IWorkflowDefinitionValidator duplicateWorkflowIdValidator = new DuplicateWorkflowIdValidator(workflowIds);
-        DuplicateWorkflowIdException exception = assertThrows(DuplicateWorkflowIdException.class, () -> {
-            duplicateWorkflowIdValidator.validate("WorkflowId", DummyWorkflowDefinitionBeanWithNoId.class);
-        });
+        DuplicateWorkflowIdException exception = assertThrows(DuplicateWorkflowIdException.class,
+                () -> duplicateWorkflowIdValidator.validate("WorkflowId", DummyWorkflowDefinitionBeanWithNoId.class));
         assertEquals("Duplicate workflow ID: WorkflowId", exception.getMessage());
     }
 }
