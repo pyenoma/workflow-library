@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WorkflowContextFactory {
-    public <T extends IWorkflowContext> T createContext(Class<T> contextClass, String workflowId)
+    public <T extends IWorkflowContext> T create(Class<T> contextClass, String workflowId)
             throws WorkflowException {
         try {
             return contextClass.getConstructor(String.class).newInstance(workflowId);

@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class WorkflowContextFactoryTest {
 
     @Test
-    void testCreateContext() {
+    void testCreate() {
         WorkflowContextFactory factory = new WorkflowContextFactory();
-        DefaultWorkflowContext context = factory.createContext(DefaultWorkflowContext.class, "WorkflowId");
+        DefaultWorkflowContext context = factory.create(DefaultWorkflowContext.class, "WorkflowId");
         assertNotNull(context);
     }
 }

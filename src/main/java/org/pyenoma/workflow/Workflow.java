@@ -1,18 +1,24 @@
 package org.pyenoma.workflow;
 
+import lombok.Builder;
 import lombok.NonNull;
+import org.pyenoma.workflow.context.IWorkflowContext;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record Workflow(String id, Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency) {
+@Builder
+public record Workflow(String id, Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency,
+                       Class<? extends IWorkflowContext> context) {
 
     public Workflow(@NonNull String id,
-            @NonNull Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency) {
+            @NonNull Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency,
+            Class<? extends IWorkflowContext> context) {
         this.id = id;
         this.adjacency = Collections.unmodifiableMap(adjacency);
+        this.context = context;
     }
 
     @Override
