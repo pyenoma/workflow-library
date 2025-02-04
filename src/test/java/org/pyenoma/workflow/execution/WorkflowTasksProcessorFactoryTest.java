@@ -4,19 +4,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.context.DefaultWorkflowContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class WorkflowTasksProcessorFactoryTest {
-
-    @Mock private ThreadPoolTaskExecutor executor;
 
     @InjectMocks private WorkflowTasksProcessorFactory factory;
 
