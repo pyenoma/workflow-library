@@ -1,6 +1,7 @@
 package org.pyenoma.workflow.context;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.pyenoma.workflow.IWorkflowTask;
 import org.pyenoma.workflow.WorkflowNodeResult;
@@ -15,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class DefaultWorkflowContext implements IWorkflowContext {
     private final String workflowId;
     private final Map<String, Object> data = new ConcurrentHashMap<>();
@@ -22,10 +24,6 @@ public class DefaultWorkflowContext implements IWorkflowContext {
 
     private final Map<Class<? extends IWorkflowTask>, WorkflowNodeResult> executions = Collections.synchronizedMap(
             new LinkedHashMap<>());
-
-    public DefaultWorkflowContext(String workflowId) {
-        this.workflowId = workflowId;
-    }
 
     public void put(String key, Object value) {
         data.put(key, value);
