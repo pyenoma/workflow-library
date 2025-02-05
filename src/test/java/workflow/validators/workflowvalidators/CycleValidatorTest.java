@@ -3,6 +3,7 @@ package workflow.validators.workflowvalidators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pyenoma.workflow.Workflow;
+import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.CyclicWorkflowDefinedException;
 import org.pyenoma.workflow.validators.workflowvalidators.CycleValidator;
 import workflow.dummies.DummyWorkflowTask;
@@ -29,7 +30,7 @@ class CycleValidatorTest {
     @Test
     void validateCycleIsPresent() {
         // Arrange
-        Workflow workflow = new Workflow(WORKFLOW_ID,
+        Workflow<? extends IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID,
                 Map.of(DummyWorkflowTask.class, Set.of(DummyWorkflowTask2.class), DummyWorkflowTask2.class,
                         Set.of(DummyWorkflowTask3.class), DummyWorkflowTask3.class, Set.of(DummyWorkflowTask.class)));
         // Act
@@ -39,7 +40,7 @@ class CycleValidatorTest {
     @Test
     void validateCycleIsNotPresent() {
         // Arrange
-        Workflow workflow = new Workflow(WORKFLOW_ID,
+        Workflow<? extends IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID,
                 Map.of(DummyWorkflowTask.class, Set.of(DummyWorkflowTask2.class, DummyWorkflowTask3.class),
                         DummyWorkflowTask2.class, Set.of(DummyWorkflowTask3.class)));
         // Act

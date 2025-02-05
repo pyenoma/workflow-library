@@ -12,6 +12,6 @@ public interface IWorkflowErrorHandler {
      * @param e       the exception that was thrown
      * @param context the workflow context
      */
-    void handle(WorkflowException e, IWorkflowContext context, Class<? extends IWorkflowTask> taskClass);
+    void handle(WorkflowException e, IWorkflowContext context, Class<? extends IWorkflowTask<?>> taskClass);
 
 }

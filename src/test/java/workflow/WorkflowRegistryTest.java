@@ -3,6 +3,7 @@ package workflow;
 import org.junit.jupiter.api.Test;
 import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.WorkflowRegistry;
+import org.pyenoma.workflow.context.IWorkflowContext;
 
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ class WorkflowRegistryTest {
     @Test
     void testRegisterAndGetWorkflow() {
         WorkflowRegistry registry = new WorkflowRegistry();
-        Workflow workflow = new Workflow(WORKFLOW_ID, new HashMap<>());
+        Workflow<? extends IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID, new HashMap<>());
         registry.register(WORKFLOW_ID, workflow);
         assertEquals(workflow, registry.getWorkflow(WORKFLOW_ID));
     }

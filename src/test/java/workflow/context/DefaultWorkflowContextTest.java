@@ -2,7 +2,6 @@ package workflow.context;
 
 import org.junit.jupiter.api.Test;
 import org.pyenoma.workflow.context.DefaultWorkflowContext;
-import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +12,7 @@ class DefaultWorkflowContextTest {
 
     @Test
     void testGetPutAndGetAll() {
-        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
+        DefaultWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
         String key = "key";
         String value = "value";
         defaultWorkflowContext.put(key, value);
@@ -23,7 +22,7 @@ class DefaultWorkflowContextTest {
 
     @Test
     void testAddGetException() {
-        IWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
+        DefaultWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
         WorkflowException testWorkflowException = new WorkflowException("Test Workflow Exception");
         defaultWorkflowContext.addException(testWorkflowException);
         assertEquals(1, defaultWorkflowContext.getExceptions().size());

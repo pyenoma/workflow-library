@@ -2,6 +2,7 @@ package org.pyenoma.workflow.validators.services;
 
 import lombok.RequiredArgsConstructor;
 import org.pyenoma.workflow.Workflow;
+import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.validators.workflowvalidators.IWorkflowValidator;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class WorkflowValidationService {
     private final List<IWorkflowValidator> validators;
 
-    public void validate(Workflow workflow) {
+    public void validate(Workflow<? extends IWorkflowContext> workflow) {
         validators.forEach(validator -> validator.validate(workflow));
     }
 }

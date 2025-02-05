@@ -5,15 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.pyenoma.workflow.annotations.WorkflowDefinition;
-import org.pyenoma.workflow.annotations.WorkflowTask;
+import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,19 +44,18 @@ public class WorkflowBuilder {
 
         workflowDefinitionBeanTypes.forEach(workflowDefinitionBeanType -> {
             String workflowId = getWorkflowId(workflowDefinitionBeanType);
+
             workflowDefinitionValidationService.validate(workflowId, workflowDefinitionBeanType);
-            Workflow workflow = build(workflowId,
-                    Arrays.stream(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).tasks()).toList());
+
+            Workflow<? extends IWorkflowContext> workflow = Workflow.builder().id(workflowId).adjacency(
+                            Arrays.stream(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).tasks())
+                                    .map(task -> Map.entry(task.taskClass(),
+                                            Arrays.stream(task.next()).collect(Collectors.toSet())))
+                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).build();
+
             workflowValidationService.validate(workflow);
             workflowRegistry.register(workflowId, workflow);
         });
-    }
-
-    private Workflow build(String workflowId, List<WorkflowTask> workflowTasks) {
-        Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = new HashMap<>();
-        workflowTasks.forEach(workflowTask -> adjacency.put(workflowTask.taskClass(),
-                Arrays.stream(workflowTask.next()).collect(Collectors.toSet())));
-        return new Workflow(workflowId, adjacency);
     }
 }
 
