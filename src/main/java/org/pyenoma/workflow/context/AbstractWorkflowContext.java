@@ -16,10 +16,10 @@ import java.util.Map;
 public class AbstractWorkflowContext implements IWorkflowContext {
     private final String workflowId;
 
-    private final Map<Class<? extends IWorkflowTask>, WorkflowNodeResult> executions = Collections.synchronizedMap(
+    private final Map<Class<? extends IWorkflowTask<?>>, WorkflowNodeResult> executions = Collections.synchronizedMap(
             new LinkedHashMap<>());
 
-    public void addExecution(Class<? extends IWorkflowTask> task, WorkflowNodeResult result) {
+    public void addExecution(Class<? extends IWorkflowTask<?>> task, WorkflowNodeResult result) {
         executions.put(task, result);
     }
 }

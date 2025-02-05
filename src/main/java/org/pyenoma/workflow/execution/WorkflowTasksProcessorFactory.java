@@ -18,8 +18,9 @@ public class WorkflowTasksProcessorFactory {
 
     private final ApplicationContext applicationContext;
 
-    public WorkflowTasksProcessor create(Workflow workflow, IWorkflowContext context) throws InterruptedException {
-        return new WorkflowTasksProcessor(workflow, context, taskExecutor, applicationContext);
+    public <T extends IWorkflowContext> WorkflowTasksProcessor<T> create(Workflow<T> workflow, T context)
+            throws InterruptedException {
+        return new WorkflowTasksProcessor<>(workflow, context, taskExecutor, applicationContext);
     }
 
 }

@@ -19,7 +19,7 @@ public class DefaultWorkflowContext extends AbstractWorkflowContext {
     private final Map<String, Object> data = new ConcurrentHashMap<>();
     private final List<WorkflowException> exceptions = new CopyOnWriteArrayList<>();
 
-    private final Map<Class<? extends IWorkflowTask>, WorkflowNodeResult> executions = Collections.synchronizedMap(
+    private final Map<Class<? extends IWorkflowTask<?>>, WorkflowNodeResult> executions = Collections.synchronizedMap(
             new LinkedHashMap<>());
 
     public DefaultWorkflowContext(String workflowId) {
@@ -46,7 +46,7 @@ public class DefaultWorkflowContext extends AbstractWorkflowContext {
         return Collections.unmodifiableList(exceptions);
     }
 
-    public void addExecution(Class<? extends IWorkflowTask> task, WorkflowNodeResult result) {
+    public void addExecution(Class<? extends IWorkflowTask<?>> task, WorkflowNodeResult result) {
         executions.put(task, result);
     }
 

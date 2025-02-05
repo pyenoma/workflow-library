@@ -19,7 +19,7 @@ public interface IWorkflowContext {
      *
      * @return the execution order
      */
-    Map<Class<? extends IWorkflowTask>, WorkflowNodeResult> getExecutions();
+    Map<Class<? extends IWorkflowTask<?>>, WorkflowNodeResult> getExecutions();
 
     /**
      * Adds a task to the execution order. This method is called implicitly by the framework when a task is executed.
@@ -27,5 +27,5 @@ public interface IWorkflowContext {
      *
      * @param task the task to add
      */
-    void addExecution(Class<? extends IWorkflowTask> task, WorkflowNodeResult result);
+    void addExecution(Class<? extends IWorkflowTask<?>> task, WorkflowNodeResult result);
 }

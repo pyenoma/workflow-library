@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.pyenoma.workflow.annotations.WorkflowDefinition;
+import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
@@ -46,12 +47,11 @@ public class WorkflowBuilder {
 
             workflowDefinitionValidationService.validate(workflowId, workflowDefinitionBeanType);
 
-            Workflow workflow = Workflow.builder().id(workflowId).adjacency(
+            Workflow<? extends IWorkflowContext> workflow = Workflow.builder().id(workflowId).adjacency(
                             Arrays.stream(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).tasks())
                                     .map(task -> Map.entry(task.taskClass(),
                                             Arrays.stream(task.next()).collect(Collectors.toSet())))
-                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                    .context(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).context()).build();
+                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).build();
 
             workflowValidationService.validate(workflow);
             workflowRegistry.register(workflowId, workflow);

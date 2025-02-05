@@ -22,31 +22,31 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Log4j2
-public class WorkflowTasksProcessor {
+public class WorkflowTasksProcessor<T extends IWorkflowContext> {
 
-    private final IWorkflowContext context;
+    private final T context;
 
     private final Executor executor;
 
     private final ApplicationContext applicationContext;
 
-    private final Workflow workflow;
+    private final Workflow<T> workflow;
 
-    private final Map<Class<? extends IWorkflowTask>, Integer> inDegree;
+    private final Map<Class<? extends IWorkflowTask<T>>, Integer> inDegree;
 
-    private final BlockingQueue<Class<? extends IWorkflowTask>> readyQueue;
+    private final BlockingQueue<Class<? extends IWorkflowTask<T>>> readyQueue;
 
     private final CountDownLatch latch;
 
     private final AtomicBoolean stopExecution = new AtomicBoolean(false);
 
-    public WorkflowTasksProcessor(Workflow workflow, IWorkflowContext context, Executor executor,
+    public WorkflowTasksProcessor(Workflow<T> workflow, T context, Executor executor,
             ApplicationContext applicationContext) throws InterruptedException {
         this.context = context;
         this.executor = executor;
         this.applicationContext = applicationContext;
         this.workflow = workflow;
-        Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = workflow.adjacency();
+        Map<Class<? extends IWorkflowTask<T>>, Set<Class<? extends IWorkflowTask<T>>>> adjacency = workflow.adjacency();
         inDegree = calculateInDegree(adjacency);
         readyQueue = initializeReadyQueue(inDegree);
         latch = new CountDownLatch(adjacency.entrySet().stream()
@@ -61,7 +61,7 @@ public class WorkflowTasksProcessor {
 
     private void processTasks() throws InterruptedException {
         while (latch.getCount() > 0 && !stopExecution.get()) {
-            Class<? extends IWorkflowTask> taskClass = readyQueue.poll(500, TimeUnit.MILLISECONDS);
+            Class<? extends IWorkflowTask<T>> taskClass = readyQueue.poll(500, TimeUnit.MILLISECONDS);
             if (taskClass != null) {
                 executeTask(taskClass);
             }
@@ -74,9 +74,9 @@ public class WorkflowTasksProcessor {
         }
     }
 
-    private void executeTask(Class<? extends IWorkflowTask> taskClass) {
+    private void executeTask(Class<? extends IWorkflowTask<T>> taskClass) {
         executor.execute(() -> {
-            IWorkflowTask taskInstance = applicationContext.getBean(taskClass);
+            IWorkflowTask<T> taskInstance = applicationContext.getBean(taskClass);
             WorkflowNodeResult executionResult = WorkflowNodeResult.FAILURE;
             try {
                 executionResult = taskInstance.execute(context);
@@ -97,11 +97,11 @@ public class WorkflowTasksProcessor {
         });
     }
 
-    private void handleTaskCompletion(Class<? extends IWorkflowTask> taskClass, WorkflowNodeResult executionResult) {
+    private void handleTaskCompletion(Class<? extends IWorkflowTask<T>> taskClass, WorkflowNodeResult executionResult) {
         latch.countDown();
-        Set<Class<? extends IWorkflowTask>> successors = workflow.adjacency().get(taskClass);
+        Set<Class<? extends IWorkflowTask<T>>> successors = workflow.adjacency().get(taskClass);
         if (successors != null && WorkflowNodeResult.SUCCESS.equals(executionResult)) {
-            for (Class<? extends IWorkflowTask> successor : successors) {
+            for (Class<? extends IWorkflowTask<T>> successor : successors) {
                 Integer newVal = inDegree.computeIfPresent(successor, (_, oldVal) -> oldVal - 1);
                 if (Integer.valueOf(0).equals(newVal)) {
                     try {
@@ -115,17 +115,17 @@ public class WorkflowTasksProcessor {
         }
     }
 
-    private Map<Class<? extends IWorkflowTask>, Integer> calculateInDegree(
-            Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency) {
-        Map<Class<? extends IWorkflowTask>, Integer> inDegree = new ConcurrentHashMap<>();
-        Set<Class<? extends IWorkflowTask>> allTasks = adjacency.entrySet().stream()
+    private Map<Class<? extends IWorkflowTask<T>>, Integer> calculateInDegree(
+            Map<Class<? extends IWorkflowTask<T>>, Set<Class<? extends IWorkflowTask<T>>>> adjacency) {
+        Map<Class<? extends IWorkflowTask<T>>, Integer> inDegree = new ConcurrentHashMap<>();
+        Set<Class<? extends IWorkflowTask<T>>> allTasks = adjacency.entrySet().stream()
                 .flatMap(entry -> Stream.concat(Stream.of(entry.getKey()), entry.getValue().stream()))
                 .collect(Collectors.toSet());
         allTasks.forEach(taskClass -> inDegree.put(taskClass, 0));
 
         adjacency.forEach((_, successors) -> {
             if (successors != null) {
-                for (Class<? extends IWorkflowTask> successor : successors) {
+                for (Class<? extends IWorkflowTask<T>> successor : successors) {
                     inDegree.computeIfPresent(successor, (_, oldVal) -> oldVal + 1);
                 }
             }
@@ -134,10 +134,10 @@ public class WorkflowTasksProcessor {
         return inDegree;
     }
 
-    private BlockingQueue<Class<? extends IWorkflowTask>> initializeReadyQueue(
-            Map<Class<? extends IWorkflowTask>, Integer> inDegree) throws InterruptedException {
-        BlockingQueue<Class<? extends IWorkflowTask>> readyQueue = new LinkedBlockingQueue<>();
-        for (Map.Entry<Class<? extends IWorkflowTask>, Integer> entry : inDegree.entrySet()) {
+    private BlockingQueue<Class<? extends IWorkflowTask<T>>> initializeReadyQueue(
+            Map<Class<? extends IWorkflowTask<T>>, Integer> inDegree) throws InterruptedException {
+        BlockingQueue<Class<? extends IWorkflowTask<T>>> readyQueue = new LinkedBlockingQueue<>();
+        for (Map.Entry<Class<? extends IWorkflowTask<T>>, Integer> entry : inDegree.entrySet()) {
             if (entry.getValue() == 0) {
                 readyQueue.put(entry.getKey());
             }

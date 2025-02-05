@@ -25,8 +25,7 @@ class WorkflowTasksProcessorFactoryTest {
 
     @Test
     void create() throws InterruptedException {
-        assertInstanceOf(WorkflowTasksProcessor.class,
-                factory.create(new Workflow("workflowId", Map.of(), DefaultWorkflowContext.class),
+        assertInstanceOf(WorkflowTasksProcessor.class, factory.create(new Workflow<>("workflowId", Map.of()),
                         new DefaultWorkflowContext("workflowId")));
     }
 

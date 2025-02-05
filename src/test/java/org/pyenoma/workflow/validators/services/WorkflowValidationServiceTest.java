@@ -2,7 +2,6 @@ package org.pyenoma.workflow.validators.services;
 
 import org.junit.jupiter.api.Test;
 import org.pyenoma.workflow.Workflow;
-import org.pyenoma.workflow.context.DefaultWorkflowContext;
 
 import java.util.Collections;
 
@@ -15,7 +14,6 @@ class WorkflowValidationServiceTest {
         WorkflowValidationService service = new WorkflowValidationService(Collections.singletonList(_ -> {
             // do nothing
         }));
-        assertDoesNotThrow(() -> service.validate(
-                new Workflow("workflowId", Collections.emptyMap(), DefaultWorkflowContext.class)));
+        assertDoesNotThrow(() -> service.validate(new Workflow<>("workflowId", Collections.emptyMap())));
     }
 }

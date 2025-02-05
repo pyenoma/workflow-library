@@ -13,7 +13,7 @@ import org.pyenoma.workflow.exceptions.WorkflowException;
 @Getter
 @Setter
 @WorkflowTaskBean
-public class DummyWorkflowTaskThatThrowsException implements IWorkflowTask {
+public class DummyWorkflowTaskThatThrowsException implements IWorkflowTask<IWorkflowContext> {
 
     @Override
     public WorkflowNodeResult execute(IWorkflowContext context) {

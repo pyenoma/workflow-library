@@ -12,7 +12,7 @@ import org.pyenoma.workflow.context.IWorkflowContext;
 @Getter
 @Setter
 @WorkflowTaskBean
-public class DummyWorkflowTask2 implements IWorkflowTask {
+public class DummyWorkflowTask2 implements IWorkflowTask<IWorkflowContext> {
     @Override
     public WorkflowNodeResult execute(IWorkflowContext context) {
         log.info("Executing DummyWorkflowTask2");

@@ -12,6 +12,7 @@ import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.WorkflowBuilder;
 import org.pyenoma.workflow.WorkflowRegistry;
 import org.pyenoma.workflow.annotations.WorkflowDefinition;
+import org.pyenoma.workflow.context.DefaultWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
@@ -70,12 +71,14 @@ class WorkflowBuilderTest {
         workflowBuilder.build();
 
         // Assert
-        ArgumentCaptor<Workflow> workflowCaptor = ArgumentCaptor.forClass(Workflow.class);
+        @SuppressWarnings("unchecked") ArgumentCaptor<Workflow<DefaultWorkflowContext>> workflowCaptor = (ArgumentCaptor<Workflow<DefaultWorkflowContext>>) (ArgumentCaptor<?>) ArgumentCaptor.forClass(
+                Workflow.class);
+
         verify(workflowRegistry).register(eq(DummyWorkflowDefinitionBeanWithNoId.class.getName()),
                 workflowCaptor.capture());
-        Workflow workflow = workflowCaptor.getValue();
+        Workflow<DefaultWorkflowContext> workflow = workflowCaptor.getValue();
         assertNotNull(workflow);
-        Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = workflow.adjacency();
+        Map<Class<? extends IWorkflowTask<DefaultWorkflowContext>>, Set<Class<? extends IWorkflowTask<DefaultWorkflowContext>>>> adjacency = workflow.adjacency();
         assertEquals(2, adjacency.size());
         assertTrue(adjacency.containsKey(DummyWorkflowTask.class));
         assertTrue(adjacency.containsKey(DummyWorkflowTask2.class));
@@ -97,13 +100,15 @@ class WorkflowBuilderTest {
         workflowBuilder.build();
 
         // Assert
-        ArgumentCaptor<Workflow> workflowCaptor = ArgumentCaptor.forClass(Workflow.class);
+        @SuppressWarnings("unchecked") ArgumentCaptor<Workflow<DefaultWorkflowContext>> workflowCaptor = (ArgumentCaptor<Workflow<DefaultWorkflowContext>>) (ArgumentCaptor<?>) ArgumentCaptor.forClass(
+                Workflow.class);
+
         verify(workflowRegistry).register(
                 eq(DummyWorkflowDefinitionBeanWithId.class.getAnnotation(WorkflowDefinition.class).id()),
                 workflowCaptor.capture());
-        Workflow workflow = workflowCaptor.getValue();
+        Workflow<DefaultWorkflowContext> workflow = workflowCaptor.getValue();
         assertNotNull(workflow);
-        Map<Class<? extends IWorkflowTask>, Set<Class<? extends IWorkflowTask>>> adjacency = workflow.adjacency();
+        Map<Class<? extends IWorkflowTask<DefaultWorkflowContext>>, Set<Class<? extends IWorkflowTask<DefaultWorkflowContext>>>> adjacency = workflow.adjacency();
         assertEquals(2, adjacency.size());
         assertTrue(adjacency.containsKey(DummyWorkflowTask.class));
         assertTrue(adjacency.containsKey(DummyWorkflowTask2.class));
