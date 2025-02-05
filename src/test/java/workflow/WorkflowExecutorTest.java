@@ -85,7 +85,7 @@ class WorkflowExecutorTest {
         when(applicationContext.getBean(DummyWorkflowTask2.class)).thenReturn(dummyWorkflowTask2);
         when(applicationContext.getBean(DummyWorkflowTask3.class)).thenReturn(dummyWorkflowTask3);
         // Act
-        workflowExecutor.execute(WORKFLOW_ID, () -> new DefaultWorkflowContext(WORKFLOW_ID));
+        workflowExecutor.execute(WORKFLOW_ID, () -> context);
         // Assert
         verify(workflowRegistry).getWorkflow(WORKFLOW_ID);
         Iterator<Class<? extends IWorkflowTask<?>>> executionOrderIterator = context.getExecutions().keySet()
@@ -113,7 +113,7 @@ class WorkflowExecutorTest {
         when(applicationContext.getBean(DummyFailingWorkflowTask.class)).thenReturn(dummyFailingWorkflowTask);
         when(applicationContext.getBean(DummyWorkflowTask3.class)).thenReturn(dummyWorkflowTask3);
         // Act
-        workflowExecutor.execute(WORKFLOW_ID, () -> new DefaultWorkflowContext(WORKFLOW_ID));
+        workflowExecutor.execute(WORKFLOW_ID, () -> context);
         // Assert
         verify(workflowRegistry).getWorkflow(WORKFLOW_ID);
         assertEquals(2, context.getExecutions().size());
@@ -147,7 +147,7 @@ class WorkflowExecutorTest {
         when(applicationContext.getBean(DefaultWorkflowErrorHandler.class)).thenReturn(
                 new DefaultWorkflowErrorHandler());
         // Act
-        workflowExecutor.execute(WORKFLOW_ID, () -> new DefaultWorkflowContext(WORKFLOW_ID));
+        workflowExecutor.execute(WORKFLOW_ID, () -> context);
         // Assert
         verify(workflowRegistry).getWorkflow(WORKFLOW_ID);
         assertEquals(2, context.getExecutions().size());
