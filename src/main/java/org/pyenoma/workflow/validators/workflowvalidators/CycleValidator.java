@@ -15,7 +15,7 @@ import java.util.Set;
 @Component
 public class CycleValidator implements IWorkflowValidator {
     @Override
-    public void validate(Workflow<? extends IWorkflowContext> workflow) {
+    public void validate(Workflow<? extends IWorkflowContext> workflow) throws CyclicWorkflowDefinedException {
         if (hasCycle(workflow.adjacency())) {
             throw new CyclicWorkflowDefinedException(workflow);
         }

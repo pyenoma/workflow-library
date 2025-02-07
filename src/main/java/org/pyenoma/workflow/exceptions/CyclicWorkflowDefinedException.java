@@ -5,7 +5,7 @@ import org.pyenoma.workflow.context.IWorkflowContext;
 
 public class CyclicWorkflowDefinedException extends WorkflowException {
     public CyclicWorkflowDefinedException(Workflow<? extends IWorkflowContext> workflow) {
-        super(buildMessage(workflow));
+        super(workflow.id(), buildMessage(workflow));
     }
 
     private static String buildMessage(Workflow<? extends IWorkflowContext> workflow) {

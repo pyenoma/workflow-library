@@ -12,6 +12,7 @@ import org.pyenoma.workflow.WorkflowNodeResult;
 import org.pyenoma.workflow.WorkflowRegistry;
 import org.pyenoma.workflow.context.DefaultWorkflowContext;
 import org.pyenoma.workflow.context.IWorkflowContext;
+import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.pyenoma.workflow.exceptions.errorhandlers.DefaultWorkflowErrorHandler;
 import org.pyenoma.workflow.execution.WorkflowExecutor;
 import org.pyenoma.workflow.execution.WorkflowTasksProcessor;
@@ -66,7 +67,7 @@ class WorkflowExecutorTest {
     }
 
     @Test
-    void testThatWorkflowExecutesWithAllTasksSuccessfully() throws InterruptedException {
+    void testThatWorkflowExecutesWithAllTasksSuccessfully() throws InterruptedException, WorkflowException {
         // Setup
         Map<Class<? extends IWorkflowTask<IWorkflowContext>>, Set<Class<? extends IWorkflowTask<IWorkflowContext>>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
@@ -96,7 +97,7 @@ class WorkflowExecutorTest {
     }
 
     @Test
-    void testThatWorkflowStopsWhenOneTaskFails() throws InterruptedException {
+    void testThatWorkflowStopsWhenOneTaskFails() throws InterruptedException, WorkflowException {
         // Setup
         Map<Class<? extends IWorkflowTask<IWorkflowContext>>, Set<Class<? extends IWorkflowTask<IWorkflowContext>>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
@@ -127,7 +128,7 @@ class WorkflowExecutorTest {
     }
 
     @Test
-    void testThatWorkflowStopsWhenOneTaskThrowsException() throws InterruptedException {
+    void testThatWorkflowStopsWhenOneTaskThrowsException() throws InterruptedException, WorkflowException {
         // Setup
         Map<Class<? extends IWorkflowTask<IWorkflowContext>>, Set<Class<? extends IWorkflowTask<IWorkflowContext>>>> adjacency = new HashMap<>();
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
