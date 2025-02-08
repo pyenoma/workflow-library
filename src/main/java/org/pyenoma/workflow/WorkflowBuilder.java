@@ -38,6 +38,7 @@ public class WorkflowBuilder {
     }
 
     @PostConstruct
+    @SuppressWarnings({"unchecked", "RedundantCast"})
     public void build() {
         Set<Class<?>> workflowDefinitionBeanTypes = Arrays.stream(
                         applicationContext.getBeanNamesForAnnotation(WorkflowDefinition.class)).map(applicationContext::getType)
@@ -58,9 +59,17 @@ public class WorkflowBuilder {
 
             Workflow<? extends IWorkflowContext> workflow = Workflow.builder().id(workflowId).adjacency(
                             Arrays.stream(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).tasks())
-                                    .map(task -> Map.entry(task.taskClass(),
-                                            Arrays.stream(task.next()).collect(Collectors.toSet())))
-                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).build();
+                                    .map(task -> {
+                                        // Cast the key to the expected type.
+                                        Class<? extends IWorkflowTask<IWorkflowContext>> key = (Class<? extends IWorkflowTask<IWorkflowContext>>) task.taskClass();
+
+                                        // For the value, do a double cast.
+                                        Set<Class<? extends IWorkflowTask<IWorkflowContext>>> nextSet = (Set<Class<? extends IWorkflowTask<IWorkflowContext>>>) (Set<?>) Arrays.stream(
+                                                        task.next())
+                                                .map(nextTask -> (Class<? extends IWorkflowTask<IWorkflowContext>>) nextTask)
+                                                .collect(Collectors.toSet());
+                                        return Map.entry(key, nextSet);
+                                    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).build();
 
             try {
                 workflowValidationService.validate(workflow);

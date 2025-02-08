@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
 public @interface WorkflowTask {
-    Class<? extends IWorkflowTask<IWorkflowContext>> taskClass();
+    Class<? extends IWorkflowTask<? extends IWorkflowContext>> taskClass();
 
-    Class<? extends IWorkflowTask<IWorkflowContext>>[] next() default {};
+    Class<? extends IWorkflowTask<? extends IWorkflowContext>>[] next() default {};
 
 }
