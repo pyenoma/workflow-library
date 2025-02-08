@@ -7,8 +7,21 @@ public interface IWorkflowTask<T extends IWorkflowContext> {
     /**
      * Executes the node's logic.
      *
-     * @param context the workflow context
      * @return a NodeResult indicating the next action
      */
-    WorkflowNodeResult execute(T context) throws WorkflowException;
+    WorkflowNodeResult execute() throws WorkflowException;
+
+    /**
+     * Returns the context of the task.
+     *
+     * @return the context of the task
+     */
+    T getContext();
+
+    /**
+     * Sets the context of the task.
+     *
+     * @param context the context of the task
+     */
+    void setContext(T context);
 }

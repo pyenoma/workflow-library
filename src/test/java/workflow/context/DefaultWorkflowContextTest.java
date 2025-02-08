@@ -23,7 +23,7 @@ class DefaultWorkflowContextTest {
     @Test
     void testAddGetException() {
         DefaultWorkflowContext defaultWorkflowContext = new DefaultWorkflowContext(WORKFLOW_ID);
-        WorkflowException testWorkflowException = new WorkflowException("Test Workflow Exception");
+        WorkflowException testWorkflowException = new WorkflowException(WORKFLOW_ID, "Test Workflow Exception");
         defaultWorkflowContext.addException(testWorkflowException);
         assertEquals(1, defaultWorkflowContext.getExceptions().size());
         assertTrue(defaultWorkflowContext.getExceptions().contains(testWorkflowException));

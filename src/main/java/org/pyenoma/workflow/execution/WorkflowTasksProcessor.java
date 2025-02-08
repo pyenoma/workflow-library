@@ -77,9 +77,10 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
     private void executeTask(Class<? extends IWorkflowTask<T>> taskClass) {
         executor.execute(() -> {
             IWorkflowTask<T> taskInstance = applicationContext.getBean(taskClass);
+            taskInstance.setContext(context);
             WorkflowNodeResult executionResult = WorkflowNodeResult.FAILURE;
             try {
-                executionResult = taskInstance.execute(context);
+                executionResult = taskInstance.execute();
                 context.addExecution(taskClass, executionResult);
                 if (WorkflowNodeResult.FAILURE.equals(executionResult)) {
                     log.warn("Stopping workflow: {} due to task: {}, Execution result: {}", context.getWorkflowId(),

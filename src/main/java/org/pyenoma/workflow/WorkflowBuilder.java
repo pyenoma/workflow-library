@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.pyenoma.workflow.annotations.WorkflowDefinition;
 import org.pyenoma.workflow.context.IWorkflowContext;
+import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
@@ -45,7 +46,15 @@ public class WorkflowBuilder {
         workflowDefinitionBeanTypes.forEach(workflowDefinitionBeanType -> {
             String workflowId = getWorkflowId(workflowDefinitionBeanType);
 
-            workflowDefinitionValidationService.validate(workflowId, workflowDefinitionBeanType);
+            try {
+                workflowDefinitionValidationService.validate(workflowId, workflowDefinitionBeanType);
+            } catch (WorkflowException e) {
+                // We should not expect validation failures while building workflows, however, if they occur, we should
+                // wrap them as unchecked exception and throw back to spring container so that the application is crashed.
+                // We cannot allow the application to come up with invalid workflows.
+                // This is done to fail fast and avoid potential issues when the workflows are actually executed.
+                throw new RuntimeException(e);
+            }
 
             Workflow<? extends IWorkflowContext> workflow = Workflow.builder().id(workflowId).adjacency(
                             Arrays.stream(workflowDefinitionBeanType.getAnnotation(WorkflowDefinition.class).tasks())
@@ -53,7 +62,15 @@ public class WorkflowBuilder {
                                             Arrays.stream(task.next()).collect(Collectors.toSet())))
                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).build();
 
-            workflowValidationService.validate(workflow);
+            try {
+                workflowValidationService.validate(workflow);
+            } catch (WorkflowException e) {
+                // We should not expect validation failures while building workflows, however, if they occur, we should
+                // wrap them as unchecked exception and throw back to spring container so that the application is crashed.
+                // We cannot allow the application to come up with invalid workflows.
+                // This is done to fail fast and avoid potential issues when the workflows are actually executed.
+                throw new RuntimeException(e);
+            }
             workflowRegistry.register(workflowId, workflow);
         });
     }

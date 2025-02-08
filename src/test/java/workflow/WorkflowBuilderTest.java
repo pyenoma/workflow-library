@@ -58,7 +58,7 @@ class WorkflowBuilderTest {
     }
 
     @Test
-    void testBuildRegistersValidWorkflowsWithNoIdWorkflowDefinition() {
+    void testBuildRegistersValidWorkflowsWithNoIdWorkflowDefinition() throws WorkflowException {
         // Arrange
         when(applicationContext.getBeanNamesForAnnotation(WorkflowDefinition.class)).thenReturn(
                 new String[] {DummyWorkflowDefinitionBeanWithNoId.class.getName()});
@@ -87,7 +87,7 @@ class WorkflowBuilderTest {
     }
 
     @Test
-    void testBuildRegistersValidWorkflowsWithWorkflowDefinitionWithId() {
+    void testBuildRegistersValidWorkflowsWithWorkflowDefinitionWithId() throws WorkflowException {
         // Arrange
         when(applicationContext.getBeanNamesForAnnotation(WorkflowDefinition.class)).thenReturn(
                 new String[] {DummyWorkflowDefinitionBeanWithId.class.getName()});
@@ -117,18 +117,19 @@ class WorkflowBuilderTest {
     }
 
     @Test
-    void testBuildThrowsWorkflowException() {
+    void testBuildThrowsWorkflowException() throws WorkflowException {
         // Arrange
         when(applicationContext.getBeanNamesForAnnotation(WorkflowDefinition.class)).thenReturn(
                 new String[] {DummyWorkflowDefinitionBeanWithNoId.class.getName()});
         when(applicationContext.getType(DummyWorkflowDefinitionBeanWithNoId.class.getName())).thenAnswer(
                 _ -> DummyWorkflowDefinitionBeanWithNoId.class);
-        doThrow(new WorkflowException("Invalid task class definition found")).when(workflowDefinitionValidationService)
+        doThrow(new WorkflowException("WorkflowId", "Invalid task class definition found")).when(
+                        workflowDefinitionValidationService)
                 .validate(anyString(), any());
         doNothing().when(workflowValidationService).validate(any());
 
         // Act and assert
-        assertThrows(WorkflowException.class, () -> workflowBuilder.build());
+        assertThrows(RuntimeException.class, () -> workflowBuilder.build());
 
     }
 
