@@ -7,6 +7,7 @@ import org.pyenoma.workflow.WorkflowNodeResult;
 import org.pyenoma.workflow.annotations.WorkflowTaskBean;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
@@ -40,6 +41,8 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
 
     private final AtomicBoolean stopExecution = new AtomicBoolean(false);
 
+    @Value("${workflow.poll.timeout:500}") private long pollTimeout;
+
     public WorkflowTasksProcessor(Workflow<T> workflow, T context, Executor executor,
             ApplicationContext applicationContext) throws InterruptedException {
         this.context = context;
@@ -61,7 +64,7 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
 
     private void processTasks() throws InterruptedException {
         while (latch.getCount() > 0 && !stopExecution.get()) {
-            Class<? extends IWorkflowTask<T>> taskClass = readyQueue.poll(500, TimeUnit.MILLISECONDS);
+            Class<? extends IWorkflowTask<T>> taskClass = readyQueue.poll(pollTimeout, TimeUnit.MILLISECONDS);
             if (taskClass != null) {
                 executeTask(taskClass);
             }
