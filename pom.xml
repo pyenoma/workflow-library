@@ -9,6 +9,13 @@
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
+    <description>
+        Workflow Library is an open-source tool for executing chained tasks. Users define workflow sequences using an
+        adjacency list that specifies task dependencies. The library executes nodes without predecessors in parallel and
+        supports user-defined contexts to share data between nodes. It is built using the Spring Boot framework.
+    </description>
+
+
     <properties>
         <java.version>23</java.version>
         <spring.framework.version>6.2.0</spring.framework.version>
