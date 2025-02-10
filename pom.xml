@@ -9,12 +9,35 @@
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>
         Workflow Library is an open-source tool for executing chained tasks. Users define workflow sequences using an
         adjacency list that specifies task dependencies. The library executes nodes without predecessors in parallel and
         supports user-defined contexts to share data between nodes. It is built using the Spring Boot framework.
     </description>
+    <url>https://github.com/pyenoma/workflow-library</url>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/license/mit</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Akshay Mittal</name>
+            <email>mittalakshay6@gmail.com</email>
+            <organization>Pyenoma</organization>
+            <organizationUrl>https://github.com/pyenoma/workflow-library</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/pyenoma/workflow-library.git</connection>
+        <developerConnection>scm:git:ssh://github.com:pyenoma/workflow-library.git</developerConnection>
+        <url>https://github.com/pyenoma/workflow-library/tree/main</url>
+    </scm>
 
     <properties>
         <java.version>23</java.version>
