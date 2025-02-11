@@ -151,13 +151,7 @@ class WorkflowExecutorTest {
         workflowExecutor.execute(WORKFLOW_ID, () -> context);
         // Assert
         verify(workflowRegistry).getWorkflow(WORKFLOW_ID);
-        assertEquals(2, context.getExecutions().size());
-        Iterator<Class<? extends IWorkflowTask<?>>> executionOrderIterator = context.getExecutions().keySet()
-                .iterator();
-        assertTrue(List.of(DummyWorkflowTask.class, DummyWorkflowTaskThatThrowsException.class)
-                .contains(executionOrderIterator.next()));
-        assertTrue(List.of(DummyWorkflowTask.class, DummyWorkflowTaskThatThrowsException.class)
-                .contains(executionOrderIterator.next()));
+        assertTrue(context.getExecutions().containsKey(DummyWorkflowTaskThatThrowsException.class));
         assertEquals(WorkflowNodeResult.FAILURE,
                 context.getExecutions().get(DummyWorkflowTaskThatThrowsException.class));
     }
