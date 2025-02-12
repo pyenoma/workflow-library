@@ -142,7 +142,7 @@ graph LR
     style C fill:#bbf,stroke:#333,stroke-width:2px
     style D fill:#bfb,stroke:#333,stroke-width:2px
     style E fill:#fbb,stroke:#333,stroke-width:2px
-    
+```
     sequenceDiagram
     participant WE as Workflow Executor
     participant TP as Task Processor
@@ -162,7 +162,6 @@ graph LR
     T3-->>TP: Complete
     T1-->>TP: Complete
     TP-->>WE: Workflow Complete
-``` 
 
 ### Tasks
 
