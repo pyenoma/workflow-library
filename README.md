@@ -275,8 +275,6 @@ public class OrderProcessingContext extends AbstractWorkflowContext {
 
 ### Workflow Execution Model
 
-### Workflow Architecture
-
 The workflow system consists of several key components working together:
 
 1. **WorkflowExecutor**: Entry point for workflow execution
@@ -295,51 +293,50 @@ The workflow system consists of several key components working together:
    - Maintains execution state
    - Stores workflow results
 
-4. **Validation Layer**: Ensures workflow integrity
-   - Validates task dependencies
-   - Detects cycles
-   - Verifies workflow structure
-
 ```mermaid
 graph TB
-    %% Styles
-    classDef task fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
-    classDef context fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    classDef processor fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef status fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+%% Define styles with high-contrast, accessible colors
+   classDef state fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000000
+   classDef decision fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000000
+   classDef process fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000000
+   classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000000
 
-    %% Nodes
-    WE[WorkflowExecutor]
-    TP[TaskProcessor]
-    subgraph Tasks
-        T1[Task 1]
-        T2[Task 2]
-        T3[Task 3]
-    end
-    subgraph Context
-        WC[WorkflowContext]
-        TS[Task Status]
-        ED[Execution Data]
-    end
-    subgraph Validation
-        CV[Cycle Validation]
-        DV[Dependency Check]
-    end
+%% Start and initialization
+   Start([Start]) --> Init[Initialize Workflow]
+   Init --> BuildDep[Calculate Task Dependencies]
+   BuildDep --> InitQueue[Initialize Ready Queue]
 
-    %% Connections
-    WE -->|1. Initialize| TP
-    TP -->|2. Validate| Validation
-    TP -->|3. Schedule| Tasks
-    T1 & T2 & T3 -->|4. Read/Write| WC
-    Tasks -->|5. Update| TS
-    TS -->|6. Next Task| TP
-    WC -->|7. Store| ED
+%% Main execution loop
+   InitQueue --> CheckTasks{Tasks in Ready Queue?}
+   CheckTasks -->|Yes| FetchTask[Fetch Next Task]
+   CheckTasks -->|No| Wait[Wait for Tasks<br>poll timeout]
+   Wait --> CheckStop{Stop Requested?}
+   CheckStop -->|No| CheckTasks
+   CheckStop -->|Yes| Cleanup[Cleanup Resources]
 
-    %% Styles
-    class T1,T2,T3 task
-    class WC,TS,ED context
-    class WE,TP processor
-    class CV,DV status
+%% Task execution
+   FetchTask --> Execute[Execute Task in ThreadPool]
+   Execute --> ValidateResult{Check Result}
+
+%% Success path
+   ValidateResult -->|Success| UpdateContext[Update Context]
+   UpdateContext --> ProcessDeps[Process Dependencies]
+   ProcessDeps --> UpdateQueue[Update Ready Queue]
+   UpdateQueue --> CheckComplete{All Tasks Complete?}
+   CheckComplete -->|No| CheckTasks
+   CheckComplete -->|Yes| Complete([Complete])
+
+%% Error path
+   ValidateResult -->|Failure| HandleError[Handle Error]
+   HandleError --> SetStop[Set Stop Flag]
+   SetStop --> Cleanup
+   Cleanup --> Complete
+
+%% Apply styles
+   class Start,Complete default
+   class CheckTasks,ValidateResult,CheckComplete,CheckStop decision
+   class Execute,UpdateContext,ProcessDeps,UpdateQueue,Init,BuildDep,InitQueue,Wait process
+   class HandleError,SetStop,Cleanup error
 ```
 
 
@@ -355,28 +352,53 @@ The task execution follows a state machine pattern:
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
 
 ```mermaid
-graph LR
+graph TB
 %% Styles
-   classDef ready fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-   classDef running fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-   classDef completed fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+   classDef init fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+   classDef queue fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+   classDef process fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+   classDef state fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
    classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px
+   classDef complete fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
 
-%% Nodes
-   Start([Start]) --> Ready[Ready Queue]
-   Ready --> Running[Task Running]
-   Running --> Success{Success?}
-   Success -->|Yes| Next[Next Tasks]
-   Success -->|No| Error[Error Handler]
-   Next --> Ready
-   Error --> Stop([Stop])
-   Running --> Complete([Complete])
+%% Initialization Phase
+   Start([Start]) --> Init[Initialize Workflow]
+   Init --> CalcDegree[Calculate In-Degree]
+   CalcDegree --> InitQueue[Initialize Ready Queue]
+   InitQueue --> ReadyCheck{Tasks in Ready Queue?}
 
-%% Styles
-   class Ready ready
-   class Running running
-   class Next,Complete completed
-   class Error error
+%% Processing Phase   
+   ReadyCheck -->|Yes| Poll[Poll Ready Queue]
+   Poll --> TaskExec[Execute Task in ThreadPool]
+
+%% Task Execution Branches
+   TaskExec --> ExecState{Execution State}
+   ExecState -->|Success| UpdateContext[Update Context]
+   ExecState -->|Failure| FailContext[Update Context as Failed]
+   ExecState -->|Exception| ErrorHandler[Error Handler]
+
+%% Success Path
+   UpdateContext --> UpdateDeps[Update Dependencies]
+   UpdateDeps --> AddSuccessors[Add Ready Successors]
+   AddSuccessors --> DecrementLatch[Decrement Completion Latch]
+
+%% Failure Paths
+   FailContext --> StopExec[Set Stop Execution]
+   ErrorHandler --> StopExec
+   StopExec --> DecrementLatch
+
+%% Completion Check
+   DecrementLatch --> CompCheck{All Tasks Complete?}
+   CompCheck -->|No| ReadyCheck
+   CompCheck -->|Yes| Complete([Complete])
+
+%% Styling
+   class Init,CalcDegree,InitQueue init
+   class Poll,ReadyCheck queue
+   class TaskExec,ExecState process
+   class UpdateContext,FailContext,UpdateDeps state
+   class ErrorHandler,StopExec error
+   class Complete,AddSuccessors complete
 ```
 
 ## Configuration
