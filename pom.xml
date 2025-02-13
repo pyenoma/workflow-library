@@ -12,9 +12,10 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>
-        Workflow Library is an open-source tool for executing chained tasks. Users define workflow sequences using an
-        adjacency list that specifies task dependencies. The library executes nodes without predecessors in parallel and
-        supports user-defined contexts to share data between nodes. It is built using the Spring Boot framework.
+        A sophisticated Spring-based workflow execution framework that enables building and running complex task
+        workflows with parallel execution capabilities, comprehensive error handling, and robust validation. The library
+        implements a directed acyclic graph (DAG) execution model, making it perfect for complex business processes,
+        data pipelines, and multi-step operations that require precise control over task dependencies.
     </description>
     <url>https://github.com/pyenoma/workflow-library</url>
 
