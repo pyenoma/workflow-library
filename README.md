@@ -514,17 +514,40 @@ The library provides a comprehensive error handling system:
 ```mermaid
 stateDiagram-v2
    [*] --> TaskExecution
-   TaskExecution --> Success: No Errors
-   TaskExecution --> ErrorOccurred: Exception Thrown
-   ErrorOccurred --> TaskErrorHandler: Task Has Handler
-   ErrorOccurred --> GlobalErrorHandler: No Task Handler
-   TaskErrorHandler --> RetryTask: Can Retry
-   TaskErrorHandler --> FailWorkflow: Cannot Recover
-   GlobalErrorHandler --> RetryTask: Can Retry
-   GlobalErrorHandler --> FailWorkflow: Cannot Recover
-   RetryTask --> TaskExecution
-   Success --> [*]
-   FailWorkflow --> [*]
+
+   state TaskExecution {
+      [*] --> Executing
+      Executing --> TaskResult
+      TaskResult --> Success: Returns SUCCESS
+      TaskResult --> Failure: Returns FAILURE
+      TaskResult --> ExceptionThrown: Throws WorkflowException
+   }
+
+   state ErrorHandling {
+      [*] --> DetermineHandler
+      DetermineHandler --> CustomHandler: Task has custom handler
+      DetermineHandler --> DefaultHandler: No custom handler
+
+      CustomHandler --> HandleError
+      DefaultHandler --> HandleError
+
+      state HandleError {
+         [*] --> LogError
+         LogError --> UpdateContext
+         UpdateContext --> SetFailureState
+      }
+   }
+
+   Success --> UpdateExecutionContext: context.addExecution(SUCCESS)
+   Failure --> UpdateExecutionContext: context.addExecution(FAILURE)
+   ExceptionThrown --> ErrorHandling
+
+   UpdateExecutionContext --> CheckNextTasks: Continue Workflow
+   ErrorHandling --> StopWorkflow: Terminate Execution
+
+   CheckNextTasks --> TaskExecution: Has dependent tasks
+   CheckNextTasks --> [*]: No more tasks
+   StopWorkflow --> [*]
  ```
 
 ## Best Practices
