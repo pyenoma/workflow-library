@@ -22,30 +22,83 @@ applications. It stands out by offering:
 
 ```mermaid
 graph TB
-   subgraph Client Application
-      A[Client Code] --> B[Workflow Executor]
+%% Define styles
+   classDef core fill: #e8f5e9, stroke: #2e7d32, stroke-width: 2px
+   classDef execution fill: #e3f2fd, stroke: #1976d2, stroke-width: 2px
+   classDef validation fill: #fff3e0, stroke: #f57c00, stroke-width: 2px
+   classDef context fill: #fce4ec, stroke: #c2185b, stroke-width: 2px
+%% Core Components
+   subgraph CoreComponents["Core Components"]
+      WE[WorkflowExecutor]
+      WB[WorkflowBuilder]
+      WR[WorkflowRegistry]
+      W[Workflow]
+      WB --> WR
+      WR --> W
+      WE --> WR
    end
 
-   subgraph Workflow Engine
-      B --> C[Workflow Builder]
-      C --> D[Task Processor]
-      D --> E[Thread Pool Executor]
+%% Validation Layer
+   subgraph ValidationLayer["Validation Layer"]
+      WDVS[WorkflowDefinitionValidationService]
+      subgraph DefinitionValidators["Definition Validators"]
+         DV1[DuplicateTaskValidator]
+         DV2[EmptyWorkflowValidator]
+      end
+
+      WVS[WorkflowValidationService]
+      subgraph WorkflowValidators["Workflow Validators"]
+         CV[CycleValidator]
+      end
+
+      WDVS --> DV1 & DV2
+      WVS --> CV
+      WB --> WDVS
+      WB --> WVS
    end
 
-   subgraph Execution Layer
-      E --> F1[Task 1]
-      E --> F2[Task 2]
-      E --> F3[Task 3]
+%% Execution Layer
+   subgraph ExecutionLayer["Execution Layer"]
+      WTP[WorkflowTasksProcessor]
+      TP[ThreadPool]
+
+      subgraph Tasks["Workflow Tasks"]
+         T1[Task 1]
+         T2[Task 2]
+         T3[Task 3]
+      end
+
+      WTP --> TP
+      TP --> Tasks
    end
 
-   subgraph Shared Resources
-      G[Workflow Context]
-      H[Error Handlers]
+%% Context Management
+   subgraph ContextLayer["Context Management"]
+      IWC[IWorkflowContext]
+      AWC[AbstractWorkflowContext]
+      DWC[DefaultWorkflowContext]
+      CWC[CustomWorkflowContext]
+      IWC --> AWC
+      AWC --> DWC
+      IWC -.-> CWC
+      AWC -.-> CWC
    end
 
-   F1 & F2 & F3 ---|Read/Write| G
-   F1 & F2 & F3 ---|Error Handling| H
-```
+%% Cross-layer connections
+   WE --> WTP
+   Tasks --> IWC
+   WTP --> IWC
+%% Apply styles
+   class WE, WB, WR, W core
+   class WTP, TP, T1, T2, T3 execution
+   class WVS, WDVS, CV, DV1, DV2 validation
+   class IWC, AWC, DWC, CWC context
+%% Add notes
+   classDef note fill: #fff, stroke: #999, stroke-width: 1px
+   Note1[Tasks can use any context<br>implementing IWorkflowContext]
+   Note1 --> Tasks
+   class Note1 note
+```   
 
 ## Table of Contents
 
