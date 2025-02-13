@@ -22,12 +22,12 @@ applications. It stands out by offering:
 
 ```mermaid
 graph TB
-%% Define styles
-   classDef core fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-   classDef execution fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-   classDef validation fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-   classDef context fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-   classDef note fill:#fff,stroke:#999,stroke-width:1px
+%% Define styles with high-contrast, accessible colors that work in both modes
+   classDef core fill:#b2dfdb,stroke:#004d40,stroke-width:2px,color:#000000
+   classDef execution fill:#bbdefb,stroke:#0d47a1,stroke-width:2px,color:#000000
+   classDef validation fill:#ffe0b2,stroke:#e65100,stroke-width:2px,color:#000000
+   classDef context fill:#f8bbd0,stroke:#880e4f,stroke-width:2px,color:#000000
+   classDef note fill:#e0e0e0,stroke:#424242,stroke-width:1px,color:#000000
 
 %% Core Components
    subgraph CoreComponents["Core Components"]
@@ -43,78 +43,74 @@ graph TB
    end
 
 %% Validation Layer
-subgraph ValidationLayer["Validation Layer"]
-direction TB
+   subgraph ValidationLayer["Validation Layer"]
+      direction TB
 
-subgraph DefinitionValidators["Definition Validators"]
-direction LR
-WDVS[WorkflowDefinitionValidationService]
-DV1[DuplicateTaskValidator]
-DV2[EmptyWorkflowValidator]
-WDVS --> DV1
-WDVS --> DV2
-end
+      subgraph DefinitionValidators["Definition Validators"]
+         direction LR
+         WDVS[WorkflowDefinitionValidationService]
+         DV1[DuplicateTaskValidator]
+         DV2[EmptyWorkflowValidator]
+         WDVS --> DV1
+         WDVS --> DV2
+      end
 
-ValidatorSpace[ ]
-
-subgraph WorkflowValidators["Workflow Validators"]
-direction LR
-WVS[WorkflowValidationService]
-CV[CycleValidator]
-WVS --> CV
-end
-end
+      subgraph WorkflowValidators["Workflow Validators"]
+         direction LR
+         WVS[WorkflowValidationService]
+         CV[CycleValidator]
+         WVS --> CV
+      end
+   end
 
 %% Context Management
-subgraph ContextLayer["Context Management"]
-direction TB
-IWC[IWorkflowContext]
-AWC[AbstractWorkflowContext]
-DWC[DefaultWorkflowContext]
-CWC[CustomWorkflowContext]
+   subgraph ContextLayer["Context Management"]
+      direction TB
+      IWC[IWorkflowContext]
+      AWC[AbstractWorkflowContext]
+      DWC[DefaultWorkflowContext]
+      CWC[CustomWorkflowContext]
 
-IWC --> AWC
-AWC --> DWC
-IWC -.-> CWC
-AWC -.-> CWC
-end
+      IWC --> AWC
+      AWC --> DWC
+      IWC -.-> CWC
+      AWC -.-> CWC
+   end
 
 %% Execution Layer
-subgraph ExecutionLayer["Execution Layer"]
-direction TB
-WTP[WorkflowTasksProcessor]
-TP[ThreadPool]
+   subgraph ExecutionLayer["Execution Layer"]
+      direction TB
+      WTP[WorkflowTasksProcessor]
+      TP[ThreadPool]
 
-subgraph Tasks["Workflow Tasks"]
-direction LR
-T1[Task 1]
-T2[Task 2]
-T3[Task 3]
-end
+      subgraph Tasks["&nbsp;&nbsp;&nbsp;Workflow Tasks&nbsp;&nbsp;&nbsp;"]
+         direction LR
+         T1[Task 1]
+         T2[Task 2]
+         T3[Task 3]
+      end
 
-WTP --> TP
-TP --> Tasks
-end
+      WTP --> TP
+      TP --> Tasks
+   end
 
-%% Cross-layer connections - Removed redundant arrow
-WB ---> WDVS
-WB ---> WVS
-WE --> WTP
-Tasks --> IWC
-WTP --> IWC
+%% Cross-layer connections
+   WB ---> WDVS
+   WB ---> WVS
+   WE --> WTP
+   Tasks --> IWC
+   WTP --> IWC
 
 %% Add notes
-Note1[Tasks can use any context<br>implementing IWorkflowContext]
-Note1 --> Tasks
+   Note1[Tasks can use any context<br>implementing IWorkflowContext]
+   Note1 --> Tasks
 
 %% Apply styles
-class WE,WB,WR,W core
-class WTP,TP,T1,T2,T3 execution
-class WVS,WDVS,CV,DV1,DV2 validation
-class IWC,AWC,DWC,CWC context
-class Note1 note
-class ValidatorSpace note
-style ValidatorSpace fill:none,stroke:none
+   class WE,WB,WR,W core
+   class WTP,TP,T1,T2,T3 execution
+   class WVS,WDVS,CV,DV1,DV2 validation
+   class IWC,AWC,DWC,CWC context
+   class Note1 note
 ```   
 
 ## Table of Contents
