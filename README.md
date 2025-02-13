@@ -192,25 +192,6 @@ A workflow in this library is represented as a Directed Acyclic Graph (DAG) wher
 - The execution order is determined by task dependencies
 - Multiple tasks can execute in parallel when their dependencies are satisfied
 
-### Workflow Execution Model
-
-```mermaid
-graph LR
-   subgraph Example DAG Workflow
-      A[Validate Order] --> B[Check Inventory]
-      A --> C[Calculate Price]
-      B --> D[Process Payment]
-      C --> D
-      D --> E[Send Confirmation]
-   end
-
-   style A fill: #e8f4f8, stroke: #5b9bd5, stroke-width: 2px
-   style B fill: #f5f5f5, stroke: #70ad47, stroke-width: 2px
-   style C fill: #f5f5f5, stroke: #70ad47, stroke-width: 2px
-   style D fill: #fff4ea, stroke: #ed7d31, stroke-width: 2px
-   style E fill: #f2f2f2, stroke: #666666, stroke-width: 2px
-```
-
 ```mermaid
 sequenceDiagram
    participant WE as Workflow Executor
@@ -290,6 +271,112 @@ public class OrderProcessingContext extends AbstractWorkflowContext {
       return orders.get(orderId);
    }
 }
+```
+
+### Workflow Execution Model
+
+### Workflow Architecture
+
+The workflow system consists of several key components working together:
+
+1. **WorkflowExecutor**: Entry point for workflow execution
+   - Manages workflow lifecycle
+   - Handles context initialization
+   - Coordinates task execution
+
+2. **TaskProcessor**: Core execution engine
+   - Manages task dependencies
+   - Handles parallel execution
+   - Monitors task status
+   - Controls workflow progression
+
+3. **Context Management**: Thread-safe data sharing
+   - Provides task communication
+   - Maintains execution state
+   - Stores workflow results
+
+4. **Validation Layer**: Ensures workflow integrity
+   - Validates task dependencies
+   - Detects cycles
+   - Verifies workflow structure
+
+```mermaid
+graph TB
+    %% Styles
+    classDef task fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef context fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    classDef processor fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef status fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+
+    %% Nodes
+    WE[WorkflowExecutor]
+    TP[TaskProcessor]
+    subgraph Tasks
+        T1[Task 1]
+        T2[Task 2]
+        T3[Task 3]
+    end
+    subgraph Context
+        WC[WorkflowContext]
+        TS[Task Status]
+        ED[Execution Data]
+    end
+    subgraph Validation
+        CV[Cycle Validation]
+        DV[Dependency Check]
+    end
+
+    %% Connections
+    WE -->|1. Initialize| TP
+    TP -->|2. Validate| Validation
+    TP -->|3. Schedule| Tasks
+    T1 & T2 & T3 -->|4. Read/Write| WC
+    Tasks -->|5. Update| TS
+    TS -->|6. Next Task| TP
+    WC -->|7. Store| ED
+
+    %% Styles
+    class T1,T2,T3 task
+    class WC,TS,ED context
+    class WE,TP processor
+    class CV,DV status
+```
+
+
+### Task Execution Flow
+
+The task execution follows a state machine pattern:
+
+1. **Ready**: Tasks with satisfied dependencies
+2. **Running**: Currently executing tasks
+3. **Completed**: Successfully finished tasks
+4. **Error**: Failed tasks with error handling
+
+Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
+
+```mermaid
+graph LR
+%% Styles
+   classDef ready fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+   classDef running fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+   classDef completed fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+   classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px
+
+%% Nodes
+   Start([Start]) --> Ready[Ready Queue]
+   Ready --> Running[Task Running]
+   Running --> Success{Success?}
+   Success -->|Yes| Next[Next Tasks]
+   Success -->|No| Error[Error Handler]
+   Next --> Ready
+   Error --> Stop([Stop])
+   Running --> Complete([Complete])
+
+%% Styles
+   class Ready ready
+   class Running running
+   class Next,Complete completed
+   class Error error
 ```
 
 ## Configuration
