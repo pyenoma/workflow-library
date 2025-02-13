@@ -2,7 +2,7 @@
 
 A sophisticated Spring-based workflow execution framework that enables building and running complex task workflows with
 parallel execution capabilities, comprehensive error handling, and robust validation. The library implements a directed
-acyclic graph (DAG) execution model, making it perfect for complex business processes, data pipelines, and multi-step
+acyclic graph (DAG) execution model, making it perfect for complex business processes, data pipelines, and multistep
 operations that require precise control over task dependencies.
 
 ## Overview
@@ -15,8 +15,20 @@ applications. It stands out by offering:
 - Thread-safe context sharing between tasks
 - Comprehensive error handling with customizable error handlers
 - Automatic workflow validation including cycle detection
-- Spring Boot auto-configuration for seamless integration
+- Spring Boot autoconfiguration for seamless integration
 - Execution tracking and monitoring capabilities
+
+## Table of Contents
+
+1. [System Architecture](#system-architecture)
+2. [Getting Started](#getting-started)
+3. [Core Concepts](#core-concepts)
+4. [Configuration](#configuration)
+5. [Creating Workflows](#creating-workflows)
+6. [Advanced Features](#advanced-features)
+7. [Error Handling](#error-handling)
+8. [Best Practices](#best-practices)
+9. [API Reference](#api-reference)
 
 ## System Architecture
 
@@ -111,18 +123,7 @@ graph TB
    class WVS,WDVS,CV,DV1,DV2 validation
    class IWC,AWC,DWC,CWC context
    class Note1 note
-```   
-
-## Table of Contents
-
-1. [Getting Started](#getting-started)
-2. [Core Concepts](#core-concepts)
-3. [Configuration](#configuration)
-4. [Creating Workflows](#creating-workflows)
-5. [Advanced Features](#advanced-features)
-6. [Error Handling](#error-handling)
-7. [Best Practices](#best-practices)
-8. [API Reference](#api-reference)
+```
 
 ## Getting Started
 
@@ -295,12 +296,14 @@ public class OrderProcessingContext extends AbstractWorkflowContext {
 
 ### Auto-Configuration
 
-The library provides auto-configuration through `WorkflowAutoConfiguration`:
+The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 
 ```properties
 # application.properties
 workflow.poll.timeout=500
 ```
+
+The workflow.poll.timeout setting specifies the maximum time (in milliseconds) that the WorkflowTasksProcessor will wait for a task to become available in the readyQueue before checking again. This setting helps to control the polling interval for task execution, ensuring that the processor periodically checks for new tasks to execute without being blocked indefinitely. Adjusting this value can help balance between responsiveness and resource utilization.
 
 ### Custom Thread Pool Configuration
 
@@ -391,25 +394,6 @@ The library performs several validations:
 1. Cycle Detection: Ensures the workflow is truly acyclic
 2. Duplicate Task Detection: Prevents multiple instances of the same task
 3. Workflow ID Uniqueness: Ensures unique workflow identifiers
-
-### Dynamic Workflow Modification
-
-While workflows are typically defined statically, you can create them programmatically:
-
-```java
-public Workflow<DefaultWorkflowContext> createDynamicWorkflow(
-        List<Class<? extends IWorkflowTask<DefaultWorkflowContext>>> taskClasses) {
-
-   Map<Class<? extends IWorkflowTask<DefaultWorkflowContext>>, Set<Class<? extends IWorkflowTask<DefaultWorkflowContext>>>> adjacency = new HashMap<>();
-
-   // Build adjacency map
-   for (int i = 0; i < taskClasses.size() - 1; i++) {
-      adjacency.put(taskClasses.get(i), Set.of(taskClasses.get(i + 1)));
-   }
-
-   return Workflow.<DefaultWorkflowContext>builder().id("dynamicWorkflow").adjacency(adjacency).build();
-}
-```
 
 ## Error Handling
 
@@ -509,11 +493,11 @@ stateDiagram-v2
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Please feel free to submit pull requests, open issues, or provide feedback.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ## Support
 
@@ -524,10 +508,3 @@ For support:
 3. Contact the maintainers
 
 ---
-
-## Additional Resources
-
-- [API Documentation](docs/api.md)
-- [Example Projects](examples/)
-- [Change Log](CHANGELOG.md)
-- [FAQ](docs/faq.md)
