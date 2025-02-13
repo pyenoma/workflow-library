@@ -15,7 +15,7 @@
         A sophisticated Spring-based workflow execution framework that enables building and running complex task
         workflows with parallel execution capabilities, comprehensive error handling, and robust validation. The library
         implements a directed acyclic graph (DAG) execution model, making it perfect for complex business processes,
-        data pipelines, and multi-step operations that require precise control over task dependencies.
+        data pipelines, and multistep operations that require precise control over task dependencies.
     </description>
     <url>https://github.com/pyenoma/workflow-library</url>
 
@@ -42,7 +42,7 @@
     </scm>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>17</java.version>
         <spring.framework.version>6.2.0</spring.framework.version>
         <lombok.version>1.18.34</lombok.version>
         <junit-jupiter.version>5.11.3</junit-jupiter.version>
