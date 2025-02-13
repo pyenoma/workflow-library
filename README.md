@@ -129,8 +129,8 @@ graph TB
 ### Prerequisites
 
 - Java 17 or higher
-- Spring Boot 3.x
-- Lombok
+- Spring Framework 6.2.0 or higher
+- Maven 3.6.0 or higher (for building from source)
 
 ### Installation
 
@@ -139,7 +139,7 @@ Add the dependency to your `pom.xml`:
 ```xml
 
 <dependency>
-   <groupId>org.pyenoma</groupId>
+   <groupId>io.github.pyenoma</groupId>
    <artifactId>workflow-library</artifactId>
    <version>{latest-version}</version>
 </dependency>
