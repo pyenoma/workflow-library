@@ -27,9 +27,11 @@ graph TB
    classDef execution fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
    classDef validation fill:#fff3e0,stroke:#f57c00,stroke-width:2px
    classDef context fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+   classDef note fill:#fff,stroke:#999,stroke-width:1px
 
 %% Core Components
    subgraph CoreComponents["Core Components"]
+      direction LR
       WE[WorkflowExecutor]
       WB[WorkflowBuilder]
       WR[WorkflowRegistry]
@@ -41,69 +43,78 @@ graph TB
    end
 
 %% Validation Layer
-   subgraph ValidationLayer["Validation Layer"]
-      WDVS[WorkflowDefinitionValidationService]
-      subgraph DefinitionValidators["Definition Validators"]
-         DV1[DuplicateTaskValidator]
-         DV2[EmptyWorkflowValidator]
-      end
+subgraph ValidationLayer["Validation Layer"]
+direction TB
 
-      WVS[WorkflowValidationService]
-      subgraph WorkflowValidators["Workflow Validators"]
-         CV[CycleValidator]
-      end
+subgraph DefinitionValidators["Definition Validators"]
+direction LR
+WDVS[WorkflowDefinitionValidationService]
+DV1[DuplicateTaskValidator]
+DV2[EmptyWorkflowValidator]
+WDVS --> DV1
+WDVS --> DV2
+end
 
-      WDVS --> DV1 & DV2
-      WVS --> CV
-      WB --> WDVS
-      WB --> WVS
-   end
+ValidatorSpace[ ]
 
-%% Execution Layer
-   subgraph ExecutionLayer["Execution Layer"]
-      WTP[WorkflowTasksProcessor]
-      TP[ThreadPool]
-
-      subgraph Tasks["Workflow Tasks"]
-         T1[Task 1]
-         T2[Task 2]
-         T3[Task 3]
-      end
-
-      WTP --> TP
-      TP --> Tasks
-   end
+subgraph WorkflowValidators["Workflow Validators"]
+direction LR
+WVS[WorkflowValidationService]
+CV[CycleValidator]
+WVS --> CV
+end
+end
 
 %% Context Management
-   subgraph ContextLayer["Context Management"]
-      IWC[IWorkflowContext]
-      AWC[AbstractWorkflowContext]
-      DWC[DefaultWorkflowContext]
-      CWC[CustomWorkflowContext]
+subgraph ContextLayer["Context Management"]
+direction TB
+IWC[IWorkflowContext]
+AWC[AbstractWorkflowContext]
+DWC[DefaultWorkflowContext]
+CWC[CustomWorkflowContext]
 
-      IWC --> AWC
-      AWC --> DWC
-      IWC -.-> CWC
-      AWC -.-> CWC
-   end
+IWC --> AWC
+AWC --> DWC
+IWC -.-> CWC
+AWC -.-> CWC
+end
 
-%% Cross-layer connections
-   WE --> WTP
-   Tasks --> IWC
-   WTP --> IWC
+%% Execution Layer
+subgraph ExecutionLayer["Execution Layer"]
+direction TB
+WTP[WorkflowTasksProcessor]
+TP[ThreadPool]
 
-%% Apply styles
-   class WE,WB,WR,W core
-   class WTP,TP,T1,T2,T3 execution
-   class WVS,WDVS,CV,DV1,DV2 validation
-   class IWC,AWC,DWC,CWC context
+subgraph Tasks["Workflow Tasks"]
+direction LR
+T1[Task 1]
+T2[Task 2]
+T3[Task 3]
+end
+
+WTP --> TP
+TP --> Tasks
+end
+
+%% Cross-layer connections - Removed redundant arrow
+WB ---> WDVS
+WB ---> WVS
+WE --> WTP
+Tasks --> IWC
+WTP --> IWC
 
 %% Add notes
-   classDef note fill:#fff,stroke:#999,stroke-width:1px
+Note1[Tasks can use any context<br>implementing IWorkflowContext]
+Note1 --> Tasks
 
-   Note1[Tasks can use any context<br>implementing IWorkflowContext]
-   Note1 --> Tasks
-   class Note1 note
+%% Apply styles
+class WE,WB,WR,W core
+class WTP,TP,T1,T2,T3 execution
+class WVS,WDVS,CV,DV1,DV2 validation
+class IWC,AWC,DWC,CWC context
+class Note1 note
+class ValidatorSpace note
+style ValidatorSpace fill:none,stroke:none
 ```   
 
 ## Table of Contents
