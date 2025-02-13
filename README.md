@@ -194,23 +194,59 @@ A workflow in this library is represented as a Directed Acyclic Graph (DAG) wher
 
 ```mermaid
 sequenceDiagram
-   participant WE as Workflow Executor
-   participant TP as Task Processor
-   participant T1 as Task 1
-   participant T2 as Task 2
-   participant T3 as Task 3
-   participant CTX as Context
-   WE ->> TP: Start Workflow
-   TP ->> T1: Execute
-   T1 ->> CTX: Read/Write
-   TP ->> T2: Execute (Parallel)
-   T2 ->> CTX: Read/Write
-   TP ->> T3: Execute (Parallel)
-   T3 ->> CTX: Read/Write
-   T2 -->> TP: Complete
-   T3 -->> TP: Complete
-   T1 -->> TP: Complete
-   TP -->> WE: Workflow Complete
+   participant WE as WorkflowExecutor
+   participant TP as TaskProcessor
+   participant T1 as Task1 (Validate)
+   participant T2 as Task2 (ProcessA)
+   participant T3 as Task3 (ProcessB)
+   participant T4 as Task4 (Aggregate)
+   participant T5 as Task5 (Finalize)
+   participant CTX as WorkflowContext
+
+   Note over WE,CTX: Workflow Execution Timeline
+
+%% Initialization
+   WE->>+TP: initialize(workflowId)
+   TP->>CTX: createContext()
+   CTX-->>TP: context created
+
+%% Task 1 Execution
+   TP->>+T1: execute()
+   T1->>CTX: read initial data
+   T1->>CTX: write validation results
+   T1-->>-TP: complete (success)
+
+%% Parallel Execution of Task 2 & 3
+   par Task2 Execution
+      TP->>+T2: execute()
+      T2->>CTX: read validation data
+      T2->>CTX: write processing results
+      T2-->>-TP: complete (success)
+   and Task3 Execution
+      TP->>+T3: execute()
+      T3->>CTX: read validation data
+      T3->>CTX: write processing results
+      T3-->>-TP: complete (success)
+   end
+
+%% Task 4 Execution (waits for both T2 & T3)
+   TP->>+T4: execute()
+   T4->>CTX: read T2 results
+   T4->>CTX: read T3 results
+   T4->>CTX: write aggregated results
+   T4-->>-TP: complete (success)
+
+%% Task 5 Execution
+   TP->>+T5: execute()
+   T5->>CTX: read aggregated data
+   T5->>CTX: write final results
+   T5-->>-TP: complete (success)
+
+%% Workflow Completion
+   TP-->>-WE: workflow complete
+
+   Note over WE,CTX: Task States: Ready → Running → Completed
+   Note over T2,T3: Parallel Execution Phase
 ```
 
 ### Tasks
