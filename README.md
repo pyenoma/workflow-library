@@ -5,6 +5,7 @@ parallel execution capabilities, comprehensive error handling, and robust valida
 acyclic graph (DAG) execution model, making it perfect for complex business processes, data pipelines, and multistep
 operations that require precise control over task dependencies.
 
+
 ## Overview
 
 The Pyenoma Workflow Library provides a declarative way to define and execute task-based workflows in Spring
@@ -18,6 +19,7 @@ applications. It stands out by offering:
 - Spring Boot autoconfiguration for seamless integration
 - Execution tracking and monitoring capabilities
 
+
 ## Table of Contents
 
 1. [System Architecture](#system-architecture)
@@ -29,6 +31,7 @@ applications. It stands out by offering:
 7. [Error Handling](#error-handling)
 8. [Best Practices](#best-practices)
 9. [API Reference](#api-reference)
+
 
 ## System Architecture
 
@@ -125,6 +128,7 @@ graph TB
    class Note1 note
 ```
 
+
 ## Getting Started
 
 ### Prerequisites
@@ -138,7 +142,6 @@ graph TB
 Add the dependency to your `pom.xml`:
 
 ```xml
-
 <dependency>
    <groupId>io.github.pyenoma</groupId>
    <artifactId>workflow-library</artifactId>
@@ -180,6 +183,7 @@ public class OnboardingService {
    }
 }
 ```
+
 
 ## Core Concepts
 
@@ -262,7 +266,6 @@ Tasks are the fundamental units of work in the workflow system. Each task:
 Example of a custom task:
 
 ```java
-
 @WorkflowTaskBean(errorHandler = CustomErrorHandler.class)
 public class DataProcessingTask implements IWorkflowTask<DefaultWorkflowContext> {
    @Autowired private DataService dataService;
@@ -387,6 +390,7 @@ The task execution follows a state machine pattern:
 
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
 
+
 ## Configuration
 
 ### Auto-Configuration
@@ -403,7 +407,6 @@ The workflow.poll.timeout setting specifies the maximum time (in milliseconds) t
 ### Custom Thread Pool Configuration
 
 ```java
-
 @Configuration
 public class WorkflowConfig {
    @Bean
@@ -417,6 +420,7 @@ public class WorkflowConfig {
    }
 }
 ```
+
 
 ## Creating Workflows
 
@@ -462,6 +466,7 @@ public class ValidateOrderTask implements IWorkflowTask<OrderProcessingContext> 
 }
 ```
 
+
 ## Advanced Features
 
 ### Custom Error Handlers
@@ -489,6 +494,7 @@ The library performs several validations:
 1. Cycle Detection: Ensures the workflow is truly acyclic
 2. Duplicate Task Detection: Prevents multiple instances of the same task
 3. Workflow ID Uniqueness: Ensures unique workflow identifiers
+
 
 ## Error Handling
 
@@ -550,6 +556,7 @@ stateDiagram-v2
    StopWorkflow --> [*]
  ```
 
+
 ## Best Practices
 
 ### Task Design
@@ -588,6 +595,7 @@ stateDiagram-v2
 5. Consider task granularity
 6. Profile workflow execution
 
+
 ## API Reference
 
 ### Core Interfaces
@@ -609,13 +617,16 @@ stateDiagram-v2
 - `@WorkflowTask`: Defines a task and its dependencies
 - `@WorkflowTaskBean`: Marks a class as a workflow task
 
+
 ## Contributing
 
 We welcome contributions! Please feel free to submit pull requests, open issues, or provide feedback.
 
+
 ## License
 
 This project is licensed under the MIT License.
+
 
 ## Support
 
