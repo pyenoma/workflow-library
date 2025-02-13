@@ -340,7 +340,7 @@ graph TB
 ```
 
 
-### Task Execution Flow
+#### Task Execution Flow
 
 The task execution follows a state machine pattern:
 
@@ -350,56 +350,6 @@ The task execution follows a state machine pattern:
 4. **Error**: Failed tasks with error handling
 
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
-
-```mermaid
-graph TB
-%% Styles
-   classDef init fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-   classDef queue fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-   classDef process fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-   classDef state fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-   classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px
-   classDef complete fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
-
-%% Initialization Phase
-   Start([Start]) --> Init[Initialize Workflow]
-   Init --> CalcDegree[Calculate In-Degree]
-   CalcDegree --> InitQueue[Initialize Ready Queue]
-   InitQueue --> ReadyCheck{Tasks in Ready Queue?}
-
-%% Processing Phase   
-   ReadyCheck -->|Yes| Poll[Poll Ready Queue]
-   Poll --> TaskExec[Execute Task in ThreadPool]
-
-%% Task Execution Branches
-   TaskExec --> ExecState{Execution State}
-   ExecState -->|Success| UpdateContext[Update Context]
-   ExecState -->|Failure| FailContext[Update Context as Failed]
-   ExecState -->|Exception| ErrorHandler[Error Handler]
-
-%% Success Path
-   UpdateContext --> UpdateDeps[Update Dependencies]
-   UpdateDeps --> AddSuccessors[Add Ready Successors]
-   AddSuccessors --> DecrementLatch[Decrement Completion Latch]
-
-%% Failure Paths
-   FailContext --> StopExec[Set Stop Execution]
-   ErrorHandler --> StopExec
-   StopExec --> DecrementLatch
-
-%% Completion Check
-   DecrementLatch --> CompCheck{All Tasks Complete?}
-   CompCheck -->|No| ReadyCheck
-   CompCheck -->|Yes| Complete([Complete])
-
-%% Styling
-   class Init,CalcDegree,InitQueue init
-   class Poll,ReadyCheck queue
-   class TaskExec,ExecState process
-   class UpdateContext,FailContext,UpdateDeps state
-   class ErrorHandler,StopExec error
-   class Complete,AddSuccessors complete
-```
 
 ## Configuration
 
