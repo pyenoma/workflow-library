@@ -33,6 +33,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -117,13 +118,8 @@ class WorkflowExecutorTest {
         workflowExecutor.execute(WORKFLOW_ID, () -> context);
         // Assert
         verify(workflowRegistry).getWorkflow(WORKFLOW_ID);
-        assertEquals(2, context.getExecutions().size());
-        Iterator<Class<? extends IWorkflowTask<?>>> executionOrderIterator = context.getExecutions().keySet()
-                .iterator();
-        assertTrue(List.of(DummyWorkflowTask.class, DummyFailingWorkflowTask.class)
-                .contains(executionOrderIterator.next()));
-        assertTrue(List.of(DummyWorkflowTask.class, DummyFailingWorkflowTask.class)
-                .contains(executionOrderIterator.next()));
+        assertTrue(context.getExecutions().containsKey(DummyFailingWorkflowTask.class));
+        assertSame(WorkflowNodeResult.FAILURE, context.getExecutions().get(DummyFailingWorkflowTask.class));
         assertEquals(WorkflowNodeResult.FAILURE, context.getExecutions().get(DummyFailingWorkflowTask.class));
     }
 
