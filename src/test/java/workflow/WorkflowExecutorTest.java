@@ -73,7 +73,7 @@ class WorkflowExecutorTest {
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyWorkflowTask2.class, Set.of(DummyWorkflowTask3.class));
         Workflow<IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID, adjacency);
-        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(_ -> workflow);
+        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(invocation -> workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         DummyWorkflowTask dummyWorkflowTask = new DummyWorkflowTask();
         DummyWorkflowTask2 dummyWorkflowTask2 = new DummyWorkflowTask2();
@@ -103,7 +103,7 @@ class WorkflowExecutorTest {
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyFailingWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         Workflow<IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID, adjacency);
-        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(_ -> workflow);
+        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(invocation -> workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         DummyWorkflowTask dummyWorkflowTask = new DummyWorkflowTask();
         DummyFailingWorkflowTask dummyFailingWorkflowTask = new DummyFailingWorkflowTask();
@@ -134,7 +134,7 @@ class WorkflowExecutorTest {
         adjacency.put(DummyWorkflowTask.class, Set.of(DummyWorkflowTask3.class));
         adjacency.put(DummyWorkflowTaskThatThrowsException.class, Set.of(DummyWorkflowTask3.class));
         Workflow<IWorkflowContext> workflow = new Workflow<>(WORKFLOW_ID, adjacency);
-        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(_ -> workflow);
+        when(workflowRegistry.getWorkflow(WORKFLOW_ID)).thenAnswer(invocation -> workflow);
         DefaultWorkflowContext context = new DefaultWorkflowContext(WORKFLOW_ID);
         DummyWorkflowTask dummyWorkflowTask = new DummyWorkflowTask();
         DummyWorkflowTaskThatThrowsException dummyWorkflowTaskThatThrowsException = new DummyWorkflowTaskThatThrowsException();

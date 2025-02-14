@@ -12,7 +12,7 @@ class WorkflowDefinitionValidationServiceTest {
     @Test
     void validate() {
         WorkflowDefinitionValidationService service = new WorkflowDefinitionValidationService(
-                Collections.singletonList((_, _) -> {
+                Collections.singletonList((id, clazz) -> {
                     // do nothing
                 }));
         assertDoesNotThrow(() -> service.validate("workflowId", Object.class));

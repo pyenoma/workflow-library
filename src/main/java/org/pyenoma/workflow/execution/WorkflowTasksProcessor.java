@@ -106,7 +106,7 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
         Set<Class<? extends IWorkflowTask<T>>> successors = workflow.adjacency().get(taskClass);
         if (successors != null && WorkflowNodeResult.SUCCESS.equals(executionResult)) {
             for (Class<? extends IWorkflowTask<T>> successor : successors) {
-                Integer newVal = inDegree.computeIfPresent(successor, (_, oldVal) -> oldVal - 1);
+                Integer newVal = inDegree.computeIfPresent(successor, (key, oldVal) -> oldVal - 1);
                 if (Integer.valueOf(0).equals(newVal)) {
                     try {
                         readyQueue.put(successor);
@@ -127,10 +127,10 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
                 .collect(Collectors.toSet());
         allTasks.forEach(taskClass -> inDegree.put(taskClass, 0));
 
-        adjacency.forEach((_, successors) -> {
+        adjacency.forEach((key, successors) -> {
             if (successors != null) {
                 for (Class<? extends IWorkflowTask<T>> successor : successors) {
-                    inDegree.computeIfPresent(successor, (_, oldVal) -> oldVal + 1);
+                    inDegree.computeIfPresent(successor, (successorKey, oldVal) -> oldVal + 1);
                 }
             }
         });

@@ -11,7 +11,7 @@ class WorkflowValidationServiceTest {
 
     @Test
     void validate() {
-        WorkflowValidationService service = new WorkflowValidationService(Collections.singletonList(_ -> {
+        WorkflowValidationService service = new WorkflowValidationService(Collections.singletonList(w -> {
             // do nothing
         }));
         assertDoesNotThrow(() -> service.validate(new Workflow<>("workflowId", Collections.emptyMap())));
