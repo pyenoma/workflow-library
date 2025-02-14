@@ -735,7 +735,7 @@ This project is licensed under the MIT License.
 
 ---
 <div>
-  Crafted with ❤️ in 🇮🇳 by Akshay Mittal.
+  <b>Crafted with ❤️ in 🇮🇳 by Akshay Mittal.</b>
   <br/>
 </div>
 
