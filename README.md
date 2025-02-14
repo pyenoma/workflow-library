@@ -1,7 +1,7 @@
 # Workflow Library
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.pyenoma/workflow-library)](https://central.sonatype.com/artifact/io.github.pyenoma/workflow-library)
-[![Java CI with Maven](https://github.com/pyenoma/workflow-library/actions/workflows/maven.yml/badge.svg)](https://github.com/pyenoma/workflow-library/actions/workflows/maven.yml)
+[![Build Status](https://github.com/pyenoma/workflow-library/actions/workflows/build.yml/badge.svg)](https://github.com/pyenoma/workflow-library/actions/workflows/build.yml)
 [![GitHub Issues](https://img.shields.io/github/issues/pyenoma/workflow-library)](https://github.com/pyenoma/workflow-library/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/pyenoma/workflow-library)](https://github.com/pyenoma/workflow-library/pulls)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/pyenoma/workflow-library/main)](https://github.com/pyenoma/workflow-library/commits/main)
