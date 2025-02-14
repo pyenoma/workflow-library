@@ -405,6 +405,23 @@ The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 workflow.poll.timeout=500
 ```
 
+### Custom Thread Pool Configuration
+
+```java
+@Configuration
+public class WorkflowConfig {
+   @Bean
+   public Executor taskExecutor() {
+      ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+      executor.setCorePoolSize(10);
+      executor.setMaxPoolSize(20);
+      executor.setQueueCapacity(100);
+      executor.setThreadNamePrefix("workflow-");
+      return executor;
+   }
+}
+```
+
 ## Creating Workflows
 
 ### Workflow Definition
@@ -456,23 +473,6 @@ The library performs several validations:
 1. Cycle Detection: Ensures the workflow is truly acyclic.
 2. Duplicate Task Detection: Prevents multiple instances of the same task.
 3. Workflow ID Uniqueness: Ensures unique workflow identifiers.
-
-### Custom Thread Pool Configuration
-
-```java
-@Configuration
-public class WorkflowConfig {
-   @Bean
-   public Executor taskExecutor() {
-      ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-      executor.setCorePoolSize(10);
-      executor.setMaxPoolSize(20);
-      executor.setQueueCapacity(100);
-      executor.setThreadNamePrefix("workflow-");
-      return executor;
-   }
-}
-```
 
 ### Custom Error Handlers
 
