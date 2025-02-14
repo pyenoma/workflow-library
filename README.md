@@ -732,3 +732,11 @@ This project is licensed under the MIT License.
 1. Check the documentation for common issues and solutions.
 2. Open an issue in the GitHub repository if you find a bug or need help.
 3. Contact the maintainers for specific inquiries or collaboration.
+
+---
+<div>
+  Crafted with ❤️ in 🇮🇳 by Akshay Mittal.
+  <br/>
+</div>
+
+---
