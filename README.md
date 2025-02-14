@@ -5,33 +5,37 @@ parallel execution capabilities, comprehensive error handling, and robust valida
 acyclic graph (DAG) execution model, making it perfect for complex business processes, data pipelines, and multistep
 operations that require precise control over task dependencies.
 
-
 ## Overview
 
 The Pyenoma Workflow Library provides a declarative way to define and execute task-based workflows in Spring
 applications. It stands out by offering:
 
-- Annotation-driven workflow definitions for clean, maintainable code
-- Parallel task execution with sophisticated dependency management
-- Thread-safe context sharing between tasks
-- Comprehensive error handling with customizable error handlers
-- Automatic workflow validation including cycle detection
-- Spring Boot autoconfiguration for seamless integration
-- Execution tracking and monitoring capabilities
-
+- Annotation-driven workflow definitions for clean, maintainable code.
+- Parallel task execution with sophisticated dependency management.
+- Thread-safe context sharing between tasks.
+- Comprehensive error handling with customizable error handlers.
+- Automatic workflow validation including cycle detection.
+- Spring Boot autoconfiguration for seamless integration.
+- Execution tracking and monitoring capabilities.
 
 ## Table of Contents
 
 1. [System Architecture](#system-architecture)
 2. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+   - [Quick Start Example](#quick-start-example)
 3. [Core Concepts](#core-concepts)
+   - [Workflow Structure](#workflow-structure)
+   - [Tasks](#tasks)
+   - [Context Management](#context-management)
+   - [Workflow Execution Model](#workflow-execution-model)
 4. [Configuration](#configuration)
 5. [Creating Workflows](#creating-workflows)
 6. [Advanced Features](#advanced-features)
 7. [Error Handling](#error-handling)
 8. [Best Practices](#best-practices)
 9. [API Reference](#api-reference)
-
 
 ## System Architecture
 
@@ -401,8 +405,10 @@ The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 # application.properties
 workflow.poll.timeout=500
 ```
-
-The workflow.poll.timeout setting specifies the maximum time (in milliseconds) that the WorkflowTasksProcessor will wait for a task to become available in the readyQueue before checking again. This setting helps to control the polling interval for task execution, ensuring that the processor periodically checks for new tasks to execute without being blocked indefinitely. Adjusting this value can help balance between responsiveness and resource utilization.
+The workflow.poll.timeout setting specifies the maximum time (in milliseconds) that the WorkflowTasksProcessor will wait
+for a task to become available in the readyQueue before checking again. This setting helps to control the polling
+interval for task execution, ensuring that the processor periodically checks for new tasks to execute without being
+blocked indefinitely. Adjusting this value can help balance between responsiveness and resource utilization.
 
 ### Custom Thread Pool Configuration
 
@@ -429,7 +435,6 @@ public class WorkflowConfig {
 Workflows are defined using annotations that specify the task structure and dependencies:
 
 ```java
-
 @WorkflowDefinition(id = "orderProcessing", tasks = {
         @WorkflowTask(taskClass = ValidateOrderTask.class, next = {CheckInventoryTask.class, CalculatePriceTask.class}),
         @WorkflowTask(taskClass = CheckInventoryTask.class, next = ProcessPaymentTask.class),
@@ -445,7 +450,6 @@ public class OrderProcessingWorkflow {
 Tasks should be focused and follow the single responsibility principle:
 
 ```java
-
 @WorkflowTaskBean
 @RequiredArgsConstructor
 public class ValidateOrderTask implements IWorkflowTask<OrderProcessingContext> {
@@ -474,7 +478,6 @@ public class ValidateOrderTask implements IWorkflowTask<OrderProcessingContext> 
 Create specialized error handlers for specific tasks:
 
 ```java
-
 @Component
 public class OrderValidationErrorHandler implements IWorkflowErrorHandler {
    @Override
@@ -561,21 +564,21 @@ stateDiagram-v2
 
 ### Task Design
 
-1. Keep tasks atomic and focused
-2. Use appropriate error handlers
-3. Implement proper cleanup in error cases
-4. Design for parallel execution
-5. Use meaningful task names
-6. Document task dependencies
+1. Keep tasks atomic and focused.
+2. Use appropriate error handlers.
+3. Implement proper cleanup in error cases.
+4. Design for parallel execution.
+5. Use meaningful task names.
+6. Document task dependencies.
 
 ### Context Management
 
-1. Use thread-safe collections
-2. Minimize shared state
-3. Document context requirements
-4. Implement proper cleanup
-5. Use type-safe context access
-6. Consider context inheritance
+1. Use thread-safe collections.
+2. Minimize shared state.
+3. Document context requirements.
+4. Implement proper cleanup.
+5. Use type-safe context access.
+6. Consider context inheritance.
 
 ### Error Handling
 
@@ -622,14 +625,12 @@ stateDiagram-v2
 
 We welcome contributions! Please feel free to submit pull requests, open issues, or provide feedback.
 
-
 ## License
 
 This project is licensed under the MIT License.
 
 
 ## Support
-
 For support:
 
 1. Check the documentation
