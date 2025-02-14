@@ -7,16 +7,47 @@ operations that require precise control over task dependencies.
 
 ## Overview
 
-The Pyenoma Workflow Library provides a declarative way to define and execute task-based workflows in Spring
-applications. It stands out by offering:
+The Pyenoma Workflow Library is a sophisticated Spring-based framework for defining and executing complex workflows in Java applications. It provides a declarative approach to workflow management, allowing developers to focus on business logic while the framework handles execution flow, parallel processing, and error management. Built on Spring's powerful dependency injection and configuration capabilities, it seamlessly integrates into existing Spring applications while maintaining high performance and reliability.
 
-- Annotation-driven workflow definitions for clean, maintainable code.
-- Parallel task execution with sophisticated dependency management.
-- Thread-safe context sharing between tasks.
-- Comprehensive error handling with customizable error handlers.
-- Automatic workflow validation including cycle detection.
-- Spring Boot autoconfiguration for seamless integration.
-- Execution tracking and monitoring capabilities.
+The library's directed acyclic graph (DAG) execution model makes it ideal for:
+- Complex business processes requiring multiple steps.
+- Data processing pipelines with parallel execution.
+- Event-driven workflows with sophisticated dependencies.
+- Multi-stage validation and processing operations.
+
+## Features
+
+### Core Capabilities
+- **Declarative Workflow Definition**: Define workflows using intuitive annotations.
+- **Parallel Execution**: Automatic parallel processing of independent tasks.
+- **Dynamic Task Dependencies**: Flexible task dependency management using DAG model.
+- **Type-Safe Context**: Thread-safe data sharing between tasks with type safety.
+
+### Development Features
+- **Spring Boot Auto-configuration**: Zero configuration setup in Spring Boot applications.
+- **Custom Context Support**: Extensible context system for specialized workflow needs.
+- **Annotation-Driven Development**: Clean, maintainable code through annotations.
+- **Flexible Task Implementation**: Support for various task types and execution patterns.
+
+### Operational Features
+- **Comprehensive Validation**:
+   - Automatic cycle detection in workflow definitions.
+   - Duplicate task detection.
+   - Dependency validation.
+- **Advanced Error Handling**:
+   - Custom error handlers per task.
+   - Automatic workflow termination on failures.
+   - Detailed error context preservation.
+- **Execution Management**:
+   - Configurable thread pool management.
+   - Task execution monitoring.
+   - Resource cleanup handling.
+
+### Integration Features
+- **Spring Framework Integration**: Native support for Spring dependency injection.
+- **Custom Thread Pool Configuration**: Flexible thread pool management.
+- **Extensible Architecture**: Easy integration with existing systems.
+- **Monitoring Capabilities**: Track workflow execution progress and performance.
 
 ## Table of Contents
 
@@ -298,6 +329,56 @@ The task execution follows a state machine pattern:
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
 
 ## System Architecture
+
+The Pyenoma Workflow Library is built on a layered architecture that separates concerns and promotes modularity.
+
+### Core Components
+
+#### WorkflowExecutor
+- Central orchestrator for workflow execution.
+- Manages workflow lifecycle and state.
+- Handles context initialization and cleanup.
+- Coordinates with TaskProcessor for execution.
+
+#### WorkflowBuilder
+- Constructs workflow definitions from annotations.
+- Validates workflow structure and dependencies.
+- Integrates with Spring's dependency injection.
+- Creates executable workflow instances.
+
+#### WorkflowRegistry
+- Maintains registry of workflow definitions.
+- Ensures unique workflow identifiers.
+- Provides workflow lookup and management.
+- Handles workflow versioning.
+
+### Validation Layer
+
+#### Definition Validation
+- **WorkflowDefinitionValidationService**: Coordinates validation of workflow definitions.
+- **DuplicateTaskValidator**: Ensures task uniqueness within workflows.
+- **EmptyWorkflowValidator**: Validates workflow completeness.
+- **CycleValidator**: Ensures DAG properties are maintained.
+
+#### Runtime Validation
+- Dependency validation during execution.
+- Task state validation.
+- Context integrity checking.
+- Resource availability validation.
+
+### Execution Layer
+
+#### Task Processing
+- **WorkflowTasksProcessor**: Manages task execution lifecycle.
+- **ThreadPool Management**: Handles parallel task execution.
+- **Task State Management**: Tracks task status and dependencies.
+- **Resource Management**: Controls resource allocation and cleanup.
+
+#### Context Management
+- Thread-safe context implementation.
+- Type-safe data access.
+- Context inheritance support.
+- Resource cleanup handling.
 
 ```mermaid
 graph TB
