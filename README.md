@@ -188,7 +188,6 @@ public class OnboardingService {
 }
 ```
 
-
 ## Core Concepts
 
 ### Workflow Structure
@@ -261,11 +260,11 @@ sequenceDiagram
 
 Tasks are the fundamental units of work in the workflow system. Each task:
 
-- Implements the `IWorkflowTask` interface
-- Is annotated with `@WorkflowTaskBean`
-- Has access to a shared context
-- Returns a `WorkflowNodeResult` indicating success or failure
-- Can specify error handlers
+- Implements the `IWorkflowTask` interface.
+- Is annotated with `@WorkflowTaskBean`.
+- Has access to a shared context.
+- Returns a `WorkflowNodeResult` indicating success or failure.
+- Can specify error handlers.
 
 Example of a custom task:
 
@@ -403,10 +402,10 @@ The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 
 ```properties
 # application.properties
+# Maximum time (in milliseconds) that the WorkflowTasksProcessor will wait
+# for a task to become available in the readyQueue.
 workflow.poll.timeout=500
 ```
-This setting controls how long the WorkflowTasksProcessor will wait for a task to become available in the readyQueue
-before checking again. Adjusting this value helps balance responsiveness and resource utilization.
 
 ### Custom Thread Pool Configuration
 
