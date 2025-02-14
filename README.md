@@ -1,3 +1,14 @@
+# Workflow Library
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.pyenoma/workflow-library)](https://central.sonatype.com/artifact/io.github.pyenoma/workflow-library)
+[![Java CI with Maven](https://github.com/pyenoma/workflow-library/actions/workflows/maven.yml/badge.svg)](https://github.com/pyenoma/workflow-library/actions/workflows/maven.yml)
+[![GitHub Issues](https://img.shields.io/github/issues/pyenoma/workflow-library)](https://github.com/pyenoma/workflow-library/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/pyenoma/workflow-library)](https://github.com/pyenoma/workflow-library/pulls)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/pyenoma/workflow-library/main)](https://github.com/pyenoma/workflow-library/commits/main)
+[![Java Version](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/technologies/downloads/#java17)
+[![Spring Version](https://img.shields.io/badge/Spring-6.2.0%2B-green)](https://spring.io/)
+[![GitHub Stars](https://img.shields.io/github/stars/pyenoma/workflow-library)](https://github.com/pyenoma/workflow-library/stargazers)
+
 # Pyenoma Workflow Library
 
 A sophisticated Spring-based workflow execution framework that enables building and running complex task workflows with
