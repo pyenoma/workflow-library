@@ -291,9 +291,9 @@ public class DataProcessingTask implements IWorkflowTask<DefaultWorkflowContext>
 
 The workflow context provides a thread-safe way to share data between tasks. The library offers:
 
-- `IWorkflowContext`: Base interface for all contexts
-- `AbstractWorkflowContext`: Base implementation with common functionality
-- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage
+- `IWorkflowContext`: Base interface for all contexts.
+- `AbstractWorkflowContext`: Base implementation with common functionality.
+- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage.
 
 Creating a custom context:
 
