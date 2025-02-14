@@ -494,9 +494,9 @@ public class OrderValidationErrorHandler implements IWorkflowErrorHandler {
 
 The library performs several validations:
 
-1. Cycle Detection: Ensures the workflow is truly acyclic
-2. Duplicate Task Detection: Prevents multiple instances of the same task
-3. Workflow ID Uniqueness: Ensures unique workflow identifiers
+1. Cycle Detection: Ensures the workflow is truly acyclic.
+2. Duplicate Task Detection: Prevents multiple instances of the same task.
+3. Workflow ID Uniqueness: Ensures unique workflow identifiers.
 
 
 ## Error Handling
@@ -582,21 +582,21 @@ stateDiagram-v2
 
 ### Error Handling
 
-1. Implement custom error handlers for specific needs
-2. Log appropriate error information
-3. Clean up resources in error cases
-4. Use appropriate error types
-5. Provide meaningful error messages
-6. Consider recovery strategies
+1. Implement custom error handlers for specific needs.
+2. Log appropriate error information.
+3. Clean up resources in error cases.
+4. Use appropriate error types.
+5. Provide meaningful error messages.
+6. Consider recovery strategies.
 
 ### Performance
 
-1. Configure appropriate thread pool sizes
-2. Monitor task execution times
-3. Use appropriate timeout values
-4. Implement proper resource management
-5. Consider task granularity
-6. Profile workflow execution
+1. Configure appropriate thread pool sizes.
+2. Monitor task execution times.
+3. Use appropriate timeout values.
+4. Implement proper resource management.
+5. Consider task granularity.
+6. Profile workflow execution.
 
 
 ## API Reference
@@ -629,12 +629,10 @@ We welcome contributions! Please feel free to submit pull requests, open issues,
 
 This project is licensed under the MIT License.
 
-
 ## Support
-For support:
 
-1. Check the documentation
-2. Open an issue in the GitHub repository
-3. Contact the maintainers
+1. Check the documentation.
+2. Open an issue in the GitHub repository.
+3. Contact the maintainers.
 
 ---
