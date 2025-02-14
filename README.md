@@ -191,6 +191,34 @@ public class DataProcessingTask implements IWorkflowTask<DefaultWorkflowContext>
 }
 ```
 
+### Context Management
+
+The workflow context provides a thread-safe way to share data between tasks. The library offers:
+
+- `IWorkflowContext`: Base interface for all contexts.
+- `AbstractWorkflowContext`: Base implementation with common functionality.
+- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage.
+
+Creating a custom context:
+
+```java
+public class OrderProcessingContext extends AbstractWorkflowContext {
+   private final Map<String, Order> orders = new ConcurrentHashMap<>();
+
+   public OrderProcessingContext(String workflowId) {
+      super(workflowId);
+   }
+
+   public void addOrder(String orderId, Order order) {
+      orders.put(orderId, order);
+   }
+
+   public Order getOrder(String orderId) {
+      return orders.get(orderId);
+   }
+}
+```
+
 ### Workflow Execution Model
 
 The workflow system consists of several key components working together:
@@ -268,34 +296,6 @@ The task execution follows a state machine pattern:
 4. **Error**: Failed tasks with error handling
 
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
-
-### Context Management
-
-The workflow context provides a thread-safe way to share data between tasks. The library offers:
-
-- `IWorkflowContext`: Base interface for all contexts.
-- `AbstractWorkflowContext`: Base implementation with common functionality.
-- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage.
-
-Creating a custom context:
-
-```java
-public class OrderProcessingContext extends AbstractWorkflowContext {
-   private final Map<String, Order> orders = new ConcurrentHashMap<>();
-
-   public OrderProcessingContext(String workflowId) {
-      super(workflowId);
-   }
-
-   public void addOrder(String orderId, Order order) {
-      orders.put(orderId, order);
-   }
-
-   public Order getOrder(String orderId) {
-      return orders.get(orderId);
-   }
-}
-```
 
 ## System Architecture
 
