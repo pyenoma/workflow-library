@@ -20,118 +20,22 @@ applications. It stands out by offering:
 
 ## Table of Contents
 
-1. [System Architecture](#system-architecture)
-2. [Getting Started](#getting-started)
+1. [Getting Started](#getting-started)
    - [Prerequisites](#prerequisites)
    - [Installation](#installation)
    - [Quick Start Example](#quick-start-example)
-3. [Core Concepts](#core-concepts)
+2. [Core Concepts](#core-concepts)
    - [Workflow Structure](#workflow-structure)
    - [Tasks](#tasks)
    - [Context Management](#context-management)
    - [Workflow Execution Model](#workflow-execution-model)
+3. [System Architecture](#system-architecture)
 4. [Configuration](#configuration)
 5. [Creating Workflows](#creating-workflows)
 6. [Advanced Features](#advanced-features)
 7. [Error Handling](#error-handling)
 8. [Best Practices](#best-practices)
 9. [API Reference](#api-reference)
-
-## System Architecture
-
-```mermaid
-graph TB
-%% Define styles with high-contrast, accessible colors that work in both modes
-   classDef core fill:#b2dfdb,stroke:#004d40,stroke-width:2px,color:#000000
-   classDef execution fill:#bbdefb,stroke:#0d47a1,stroke-width:2px,color:#000000
-   classDef validation fill:#ffe0b2,stroke:#e65100,stroke-width:2px,color:#000000
-   classDef context fill:#f8bbd0,stroke:#880e4f,stroke-width:2px,color:#000000
-   classDef note fill:#e0e0e0,stroke:#424242,stroke-width:1px,color:#000000
-
-%% Core Components
-   subgraph CoreComponents["Core Components"]
-      direction LR
-      WE[WorkflowExecutor]
-      WB[WorkflowBuilder]
-      WR[WorkflowRegistry]
-      W[Workflow]
-
-      WB --> WR
-      WR --> W
-      WE --> WR
-   end
-
-%% Validation Layer
-   subgraph ValidationLayer["Validation Layer"]
-      direction TB
-
-      subgraph DefinitionValidators["Definition Validators"]
-         direction LR
-         WDVS[WorkflowDefinitionValidationService]
-         DV1[DuplicateTaskValidator]
-         DV2[EmptyWorkflowValidator]
-         WDVS --> DV1
-         WDVS --> DV2
-      end
-
-      subgraph WorkflowValidators["Workflow Validators"]
-         direction LR
-         WVS[WorkflowValidationService]
-         CV[CycleValidator]
-         WVS --> CV
-      end
-   end
-
-%% Context Management
-   subgraph ContextLayer["Context Management"]
-      direction TB
-      IWC[IWorkflowContext]
-      AWC[AbstractWorkflowContext]
-      DWC[DefaultWorkflowContext]
-      CWC[CustomWorkflowContext]
-
-      IWC --> AWC
-      AWC --> DWC
-      IWC -.-> CWC
-      AWC -.-> CWC
-   end
-
-%% Execution Layer
-   subgraph ExecutionLayer["Execution Layer"]
-      direction TB
-      WTP[WorkflowTasksProcessor]
-      TP[ThreadPool]
-
-      subgraph Tasks["&nbsp;&nbsp;&nbsp;Workflow Tasks&nbsp;&nbsp;&nbsp;"]
-         direction LR
-         T1[Task 1]
-         T2[Task 2]
-         T3[Task 3]
-      end
-
-      WTP --> TP
-      TP --> Tasks
-   end
-
-%% Cross-layer connections
-   WB ---> WDVS
-   WB ---> WVS
-   WE --> WTP
-   Tasks --> IWC
-   WTP --> IWC
-
-%% Add notes
-   Note1[Tasks can use any context<br>implementing IWorkflowContext]
-   Note1 --> Tasks
-
-%% Apply styles
-   class WE,WB,WR,W core
-   class WTP,TP,T1,T2,T3 execution
-   class WVS,WDVS,CV,DV1,DV2 validation
-   class IWC,AWC,DWC,CWC context
-   class Note1 note
-```
-
 
 ## Getting Started
 
@@ -287,34 +191,6 @@ public class DataProcessingTask implements IWorkflowTask<DefaultWorkflowContext>
 }
 ```
 
-### Context Management
-
-The workflow context provides a thread-safe way to share data between tasks. The library offers:
-
-- `IWorkflowContext`: Base interface for all contexts.
-- `AbstractWorkflowContext`: Base implementation with common functionality.
-- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage.
-
-Creating a custom context:
-
-```java
-public class OrderProcessingContext extends AbstractWorkflowContext {
-   private final Map<String, Order> orders = new ConcurrentHashMap<>();
-
-   public OrderProcessingContext(String workflowId) {
-      super(workflowId);
-   }
-
-   public void addOrder(String orderId, Order order) {
-      orders.put(orderId, order);
-   }
-
-   public Order getOrder(String orderId) {
-      return orders.get(orderId);
-   }
-}
-```
-
 ### Workflow Execution Model
 
 The workflow system consists of several key components working together:
@@ -393,6 +269,128 @@ The task execution follows a state machine pattern:
 
 Tasks can execute in parallel when their dependencies are met, and the system maintains thread safety through the context management system.
 
+### Context Management
+
+The workflow context provides a thread-safe way to share data between tasks. The library offers:
+
+- `IWorkflowContext`: Base interface for all contexts.
+- `AbstractWorkflowContext`: Base implementation with common functionality.
+- `DefaultWorkflowContext`: Ready-to-use implementation with key-value storage.
+
+Creating a custom context:
+
+```java
+public class OrderProcessingContext extends AbstractWorkflowContext {
+   private final Map<String, Order> orders = new ConcurrentHashMap<>();
+
+   public OrderProcessingContext(String workflowId) {
+      super(workflowId);
+   }
+
+   public void addOrder(String orderId, Order order) {
+      orders.put(orderId, order);
+   }
+
+   public Order getOrder(String orderId) {
+      return orders.get(orderId);
+   }
+}
+```
+
+## System Architecture
+
+```mermaid
+graph TB
+%% Define styles with high-contrast, accessible colors that work in both modes
+   classDef core fill:#b2dfdb,stroke:#004d40,stroke-width:2px,color:#000000
+   classDef execution fill:#bbdefb,stroke:#0d47a1,stroke-width:2px,color:#000000
+   classDef validation fill:#ffe0b2,stroke:#e65100,stroke-width:2px,color:#000000
+   classDef context fill:#f8bbd0,stroke:#880e4f,stroke-width:2px,color:#000000
+   classDef note fill:#e0e0e0,stroke:#424242,stroke-width:1px,color:#000000
+
+%% Core Components
+   subgraph CoreComponents["Core Components"]
+      direction LR
+      WE[WorkflowExecutor]
+      WB[WorkflowBuilder]
+      WR[WorkflowRegistry]
+      W[Workflow]
+
+      WB --> WR
+      WR --> W
+      WE --> WR
+   end
+
+%% Validation Layer
+   subgraph ValidationLayer["Validation Layer"]
+      direction TB
+
+      subgraph DefinitionValidators["Definition Validators"]
+         direction LR
+         WDVS[WorkflowDefinitionValidationService]
+         DV1[DuplicateTaskValidator]
+         DV2[EmptyWorkflowValidator]
+         WDVS --> DV1
+         WDVS --> DV2
+      end
+
+      subgraph WorkflowValidators["Workflow Validators"]
+         direction LR
+         WVS[WorkflowValidationService]
+         CV[CycleValidator]
+         WVS --> CV
+      end
+   end
+
+%% Context Management
+   subgraph ContextLayer["Context Management"]
+      direction TB
+      IWC[IWorkflowContext]
+      AWC[AbstractWorkflowContext]
+      DWC[DefaultWorkflowContext]
+      CWC[CustomWorkflowContext]
+
+      IWC --> AWC
+      AWC --> DWC
+      IWC -.-> CWC
+      AWC -.-> CWC
+   end
+
+%% Execution Layer
+   subgraph ExecutionLayer["Execution Layer"]
+      direction TB
+      WTP[WorkflowTasksProcessor]
+      TP[ThreadPool]
+
+      subgraph Tasks["&nbsp;&nbsp;&nbsp;Workflow Tasks&nbsp;&nbsp;&nbsp;"]
+         direction LR
+         T1[Task 1]
+         T2[Task 2]
+         T3[Task 3]
+      end
+
+      WTP --> TP
+      TP --> Tasks
+   end
+
+%% Cross-layer connections
+   WB ---> WDVS
+   WB ---> WVS
+   WE --> WTP
+   Tasks --> IWC
+   WTP --> IWC
+
+%% Add notes
+   Note1[Tasks can use any context<br>implementing IWorkflowContext]
+   Note1 --> Tasks
+
+%% Apply styles
+   class WE,WB,WR,W core
+   class WTP,TP,T1,T2,T3 execution
+   class WVS,WDVS,CV,DV1,DV2 validation
+   class IWC,AWC,DWC,CWC context
+   class Note1 note
+```
 
 ## Configuration
 
@@ -406,24 +404,6 @@ The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 # for a task to become available in the readyQueue.
 workflow.poll.timeout=500
 ```
-
-### Custom Thread Pool Configuration
-
-```java
-@Configuration
-public class WorkflowConfig {
-   @Bean
-   public Executor taskExecutor() {
-      ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-      executor.setCorePoolSize(10);
-      executor.setMaxPoolSize(20);
-      executor.setQueueCapacity(100);
-      executor.setThreadNamePrefix("workflow-");
-      return executor;
-   }
-}
-```
-
 
 ## Creating Workflows
 
@@ -467,8 +447,32 @@ public class ValidateOrderTask implements IWorkflowTask<OrderProcessingContext> 
 }
 ```
 
-
 ## Advanced Features
+
+### Workflow Validation
+
+The library performs several validations:
+
+1. Cycle Detection: Ensures the workflow is truly acyclic.
+2. Duplicate Task Detection: Prevents multiple instances of the same task.
+3. Workflow ID Uniqueness: Ensures unique workflow identifiers.
+
+### Custom Thread Pool Configuration
+
+```java
+@Configuration
+public class WorkflowConfig {
+   @Bean
+   public Executor taskExecutor() {
+      ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+      executor.setCorePoolSize(10);
+      executor.setMaxPoolSize(20);
+      executor.setQueueCapacity(100);
+      executor.setThreadNamePrefix("workflow-");
+      return executor;
+   }
+}
+```
 
 ### Custom Error Handlers
 
@@ -486,15 +490,6 @@ public class OrderValidationErrorHandler implements IWorkflowErrorHandler {
    }
 }
 ```
-
-### Workflow Validation
-
-The library performs several validations:
-
-1. Cycle Detection: Ensures the workflow is truly acyclic.
-2. Duplicate Task Detection: Prevents multiple instances of the same task.
-3. Workflow ID Uniqueness: Ensures unique workflow identifiers.
-
 
 ## Error Handling
 
@@ -555,7 +550,6 @@ stateDiagram-v2
    CheckNextTasks --> [*]: No more tasks
    StopWorkflow --> [*]
  ```
-
 
 ## Best Practices
 
