@@ -405,10 +405,8 @@ The library provides autoconfiguration through `WorkflowAutoConfiguration`:
 # application.properties
 workflow.poll.timeout=500
 ```
-The workflow.poll.timeout setting specifies the maximum time (in milliseconds) that the WorkflowTasksProcessor will wait
-for a task to become available in the readyQueue before checking again. This setting helps to control the polling
-interval for task execution, ensuring that the processor periodically checks for new tasks to execute without being
-blocked indefinitely. Adjusting this value can help balance between responsiveness and resource utilization.
+This setting controls how long the WorkflowTasksProcessor will wait for a task to become available in the readyQueue
+before checking again. Adjusting this value helps balance responsiveness and resource utilization.
 
 ### Custom Thread Pool Configuration
 
@@ -504,19 +502,19 @@ The library performs several validations:
 The library provides a comprehensive error handling system:
 
 1. Task-Level Error Handling:
-   - Custom error handlers per task
-   - Automatic workflow termination on failures
-   - Error context preservation
+   - Custom error handlers per task.
+   - Automatic workflow termination on failures.
+   - Error context preservation.
 
 2. Workflow-Level Validation:
-   - Structural validation
-   - Dependency validation
-   - Configuration validation
+   - Structural validation.
+   - Dependency validation.
+   - Configuration validation.
 
 3. Runtime Error Management:
-   - Thread interruption handling
-   - Resource cleanup
-   - Error propagation
+   - Thread interruption handling.
+   - Resource cleanup.
+   - Error propagation.
 
 ### Error Handling Flow
 
@@ -603,22 +601,22 @@ stateDiagram-v2
 
 ### Core Interfaces
 
-- `IWorkflowTask<T>`: Base interface for all workflow tasks
-- `IWorkflowContext`: Interface for workflow context
-- `IWorkflowErrorHandler`: Interface for error handlers
+- `IWorkflowTask<T>`: Base interface for all workflow tasks.
+- `IWorkflowContext`: Interface for workflow context.
+- `IWorkflowErrorHandler`: Interface for error handlers.
 
 ### Key Classes
 
-- `WorkflowExecutor`: Main entry point for workflow execution
-- `WorkflowTasksProcessor`: Handles task execution and dependencies
-- `WorkflowBuilder`: Constructs workflows from definitions
-- `DefaultWorkflowContext`: Standard context implementation
+- `WorkflowExecutor`: Main entry point for workflow execution.
+- `WorkflowTasksProcessor`: Handles task execution and dependencies.
+- `WorkflowBuilder`: Constructs workflows from definitions.
+- `DefaultWorkflowContext`: Standard context implementation.
 
 ### Annotations
 
-- `@WorkflowDefinition`: Defines a workflow
-- `@WorkflowTask`: Defines a task and its dependencies
-- `@WorkflowTaskBean`: Marks a class as a workflow task
+- `@WorkflowDefinition`: Defines a workflow.
+- `@WorkflowTask`: Defines a task and its dependencies.
+- `@WorkflowTaskBean`: Marks a class as a workflow task.
 
 
 ## Contributing
@@ -631,8 +629,8 @@ This project is licensed under the MIT License.
 
 ## Support
 
-1. Check the documentation.
-2. Open an issue in the GitHub repository.
-3. Contact the maintainers.
+1. Check the documentation for common issues and solutions.
+2. Open an issue in the GitHub repository if you find a bug or need help.
+3. Contact the maintainers for specific inquiries or collaboration.
 
 ---
