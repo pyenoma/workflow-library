@@ -8,11 +8,9 @@ import org.pyenoma.workflow.WorkflowRegistry;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.context.IWorkflowContextFactory;
 import org.pyenoma.workflow.exceptions.WorkflowException;
-import org.springframework.stereotype.Service;
 
 @Log4j2
 @RequiredArgsConstructor
-@Service
 public class WorkflowExecutor {
 
     private final WorkflowRegistry workflowRegistry;

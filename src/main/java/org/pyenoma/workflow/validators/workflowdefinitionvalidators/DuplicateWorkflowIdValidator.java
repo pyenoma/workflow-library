@@ -2,12 +2,10 @@ package org.pyenoma.workflow.validators.workflowdefinitionvalidators;
 
 import lombok.RequiredArgsConstructor;
 import org.pyenoma.workflow.exceptions.DuplicateWorkflowIdException;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 @RequiredArgsConstructor
-@Component
 public class DuplicateWorkflowIdValidator implements IWorkflowDefinitionValidator {
     private final Set<String> seenWorkflowIds;
 

@@ -5,12 +5,10 @@ import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.pyenoma.workflow.validators.workflowvalidators.IWorkflowValidator;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Component
 public class WorkflowValidationService {
     private final List<IWorkflowValidator> validators;
 

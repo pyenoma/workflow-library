@@ -5,16 +5,13 @@ import lombok.extern.log4j.Log4j2;
 import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-
-import java.util.concurrent.Executor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Log4j2
 @RequiredArgsConstructor
-@Component
 public class WorkflowTasksProcessorFactory {
 
-    private final Executor taskExecutor;
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     private final ApplicationContext applicationContext;
 

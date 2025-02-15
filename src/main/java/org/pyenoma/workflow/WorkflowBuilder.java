@@ -10,7 +10,6 @@ import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
-@Component
 public class WorkflowBuilder {
     private final ApplicationContext applicationContext;
 

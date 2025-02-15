@@ -4,7 +4,6 @@ import org.pyenoma.workflow.IWorkflowTask;
 import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.CyclicWorkflowDefinedException;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-@Component
 public class CycleValidator implements IWorkflowValidator {
     @Override
     public void validate(Workflow<? extends IWorkflowContext> workflow) throws CyclicWorkflowDefinedException {
