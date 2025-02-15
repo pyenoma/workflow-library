@@ -1,4 +1,4 @@
-package org.pyenoma.workflow.autoconfig;
+package org.pyenoma.workflow.config;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

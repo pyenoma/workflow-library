@@ -9,6 +9,7 @@ import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
 
     @Value("${workflow.poll.timeout:500}") private long pollTimeout;
 
-    public WorkflowTasksProcessor(Workflow<T> workflow, T context, Executor executor,
+    public WorkflowTasksProcessor(Workflow<T> workflow, T context, ThreadPoolTaskExecutor executor,
             ApplicationContext applicationContext) throws InterruptedException {
         this.context = context;
         this.executor = executor;
