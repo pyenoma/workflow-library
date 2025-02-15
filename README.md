@@ -115,6 +115,7 @@ The library's directed acyclic graph (DAG) execution model makes it ideal for:
 
 ### Installation
 
+#### Maven
 Add the dependency to your `pom.xml`:
 
 ```xml
@@ -123,6 +124,11 @@ Add the dependency to your `pom.xml`:
    <artifactId>workflow-library</artifactId>
    <version>{latest-version}</version>
 </dependency>
+```
+
+#### Gradle
+```xml
+implementation group: 'io.github.pyenoma', name: 'workflow-library', version: '{latest-version}'
 ```
 
 ### Quick Start Example
