@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.pyenoma.workflow.annotations.WorkflowDefinition;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.WorkflowException;
+import org.pyenoma.workflow.exceptions.WorkflowRuntimeException;
 import org.pyenoma.workflow.validators.services.WorkflowDefinitionValidationService;
 import org.pyenoma.workflow.validators.services.WorkflowValidationService;
 import org.springframework.context.ApplicationContext;
@@ -52,7 +53,7 @@ public class WorkflowBuilder {
                 // wrap them as unchecked exception and throw back to spring container so that the application is crashed.
                 // We cannot allow the application to come up with invalid workflows.
                 // This is done to fail fast and avoid potential issues when the workflows are actually executed.
-                throw new RuntimeException(e);
+                throw new WorkflowRuntimeException(workflowId, e);
             }
 
             Workflow<? extends IWorkflowContext> workflow = Workflow.builder().id(workflowId).adjacency(
@@ -76,7 +77,7 @@ public class WorkflowBuilder {
                 // wrap them as unchecked exception and throw back to spring container so that the application is crashed.
                 // We cannot allow the application to come up with invalid workflows.
                 // This is done to fail fast and avoid potential issues when the workflows are actually executed.
-                throw new RuntimeException(e);
+                throw new WorkflowRuntimeException(workflowId, e);
             }
             workflowRegistry.register(workflowId, workflow);
         });
