@@ -6,7 +6,6 @@ import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.WorkflowNodeResult;
 import org.pyenoma.workflow.annotations.WorkflowTaskBean;
 import org.pyenoma.workflow.context.IWorkflowContext;
-import org.pyenoma.workflow.exceptions.WorkflowException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -91,7 +90,7 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
                             taskClass.getSimpleName(), executionResult);
                     stopExecution.set(true);
                 }
-            } catch (WorkflowException e) {
+            } catch (Exception e) {
                 applicationContext.getBean(taskClass.getAnnotation(WorkflowTaskBean.class).errorHandler())
                         .handle(e, context, taskClass);
                 stopExecution.set(true);
