@@ -48,7 +48,7 @@ public class WorkflowExecutionConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IWorkflowErrorHandler.class)
-    public IWorkflowErrorHandler defaultWorkflowErrorHandler() {
+    public DefaultWorkflowErrorHandler defaultWorkflowErrorHandler() {
         return new DefaultWorkflowErrorHandler();
     }
 }

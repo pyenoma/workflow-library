@@ -1,5 +1,6 @@
 package org.pyenoma.workflow.annotations;
 
+import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.exceptions.errorhandlers.DefaultWorkflowErrorHandler;
 import org.pyenoma.workflow.exceptions.errorhandlers.IWorkflowErrorHandler;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,5 +19,5 @@ import java.lang.annotation.Target;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public @interface WorkflowTaskBean {
-    Class<? extends IWorkflowErrorHandler> errorHandler() default DefaultWorkflowErrorHandler.class;
+    Class<? extends IWorkflowErrorHandler<? extends IWorkflowContext, ? extends Exception>> errorHandler() default DefaultWorkflowErrorHandler.class;
 }

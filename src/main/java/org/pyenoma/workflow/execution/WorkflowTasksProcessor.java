@@ -6,6 +6,7 @@ import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.WorkflowNodeResult;
 import org.pyenoma.workflow.annotations.WorkflowTaskBean;
 import org.pyenoma.workflow.context.IWorkflowContext;
+import org.pyenoma.workflow.exceptions.errorhandlers.IWorkflowErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -91,10 +92,18 @@ public class WorkflowTasksProcessor<T extends IWorkflowContext> {
                     stopExecution.set(true);
                 }
             } catch (Exception e) {
-                applicationContext.getBean(taskClass.getAnnotation(WorkflowTaskBean.class).errorHandler())
-                        .handle(e, context, taskClass);
-                stopExecution.set(true);
                 log.error("Task execution failed for {}: {}", taskClass.getSimpleName(), e.getMessage(), e);
+                try {
+                    @SuppressWarnings("unchecked") IWorkflowErrorHandler<T, Exception> errorHandler = (IWorkflowErrorHandler<T, Exception>) applicationContext.getBean(
+                            taskClass.getAnnotation(WorkflowTaskBean.class).errorHandler());
+                    errorHandler.handle(e, context, taskClass);
+                } catch (Exception errorHandlerException) {
+                    log.error("Exception in calling error handler for task {}: {}", taskClass.getSimpleName(),
+                            errorHandlerException.getMessage(), errorHandlerException);
+                    throw errorHandlerException;
+                } finally {
+                    stopExecution.set(true);
+                }
             } finally {
                 handleTaskCompletion(taskClass, executionResult);
             }

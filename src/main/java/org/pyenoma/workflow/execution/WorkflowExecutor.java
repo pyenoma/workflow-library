@@ -7,7 +7,6 @@ import org.pyenoma.workflow.Workflow;
 import org.pyenoma.workflow.WorkflowRegistry;
 import org.pyenoma.workflow.context.IWorkflowContext;
 import org.pyenoma.workflow.context.IWorkflowContextFactory;
-import org.pyenoma.workflow.exceptions.WorkflowException;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -18,8 +17,7 @@ public class WorkflowExecutor {
     private final WorkflowTasksProcessorFactory workflowTasksProcessorFactory;
 
     public <T extends IWorkflowContext> IWorkflowContext execute(@NonNull String workflowId,
-            IWorkflowContextFactory<T> contextFactory)
-            throws InterruptedException, WorkflowException {
+            IWorkflowContextFactory<T> contextFactory) throws InterruptedException {
         @SuppressWarnings("unchecked") Workflow<T> workflow = (Workflow<T>) workflowRegistry.getWorkflow(workflowId);
         if (workflow == null) {
             log.error("No workflow found with ID: {}", workflowId);
