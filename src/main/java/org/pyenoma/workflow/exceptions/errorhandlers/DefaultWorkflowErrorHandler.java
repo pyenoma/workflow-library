@@ -6,7 +6,7 @@ import org.pyenoma.workflow.WorkflowNodeResult;
 import org.pyenoma.workflow.context.IWorkflowContext;
 
 @Log4j2
-public class DefaultWorkflowErrorHandler implements IWorkflowErrorHandler {
+public class DefaultWorkflowErrorHandler implements IWorkflowErrorHandler<IWorkflowContext, Exception> {
     @Override
     public void handle(Exception e, IWorkflowContext context, Class<? extends IWorkflowTask<?>> taskClass) {
         context.addExecution(taskClass, WorkflowNodeResult.FAILURE);
